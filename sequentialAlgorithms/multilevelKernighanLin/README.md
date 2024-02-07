@@ -43,27 +43,50 @@ To use the programs in this repository, follow these steps:
 
 ## `computePartitionWeights`
 
-The `computePartitionWeights` function calculates the total weight of each partition based on the nodes' weights. It takes two parameters: a vector of integers `partition` representing the partition IDs of nodes and a vector of integers `nodeWeights` representing the weights of nodes.
+The `computePartitionWeights` function calculates the total weight of each partition based on the nodes' weights. 
+It takes two parameters: 
+a vector of integers `partition` representing the partition number to which nodes belong to.
+a vector of integers `nodeWeights` representing the weights of nodes.
 
 ## `computeCutCost`
 
-The `computeCutCost` function calculates the cut cost for a given partition in a graph, which represents the sum of weights of edges crossing the partition boundary. It takes a graph `myGraph` and a partition vector `partition` as input.
+The `computeCutCost` function calculates the cut cost for a given partition in a graph, which represents the sum of weights of edges crossing the partition boundary. 
+It takes two parameters: 
+a Graph data structure `myGraph`
+a partition vector `partition` specifying the current partition assigned to each node.
 
 ## `kernighanLin`
 
-The `kernighanLin` function implements the Kernighan-Lin algorithm, which iteratively improves the quality of the partition by swapping pairs of nodes to reduce the cut cost. It takes a graph `myGraph` and a partition vector `partition` as input.
+The `kernighanLin` function implements the Kernighan-Lin algorithm, which iteratively improves the quality of the partition by swapping pairs of nodes to reduce the cut cost. 
+It takes two parameters: 
+a Graph data structure `myGraph`
+a partition vector `partition` specifying the current partition assigned to each node.
 
 ## `isPowerOf2`
 
-The `isPowerOf2` function checks if both the input integer `k` and the size of the graph are powers of 2. It utilizes bitwise operations to determine whether a number is a power of 2.
+The `isPowerOf2` function checks if both the input integer `k` and the size of the graph are powers of 2. 
+It utilizes bitwise operations to determine whether a number is a power of 2.
+It takes two parameters: 
+the number of partitions to apply `k`.
+a Graph data structure `myGraph` used to obtain the size of the generated graph.
+
 
 ## `isContiguous`
 
-The `isContiguous` function checks whether a graph is contiguous (connected) using Depth-First Search (DFS) traversal. It ensures that all nodes in the graph are visited, indicating connectivity.
+The `isContiguous` function checks whether the generated graph is contiguous (connected) using Depth-First Search (DFS) traversal. 
+It ensures that all nodes in the graph are visited, indicating connectivity.
+It takes as parameter a Graph data structure `graph`
 
 ## `findNodeWithFewestAdjacents`
 
-The `findNodeWithFewestAdjacents` function finds and returns the index of a node in the graph that has the fewest adjacent nodes, excluding locked nodes. It helps in selecting nodes for certain graph-based computations.
+The `findNodeWithFewestAdjacents` function finds the index of a node in the graph that has the fewest number of adjacent nodes, excluding locked nodes.
+It returns:
+the index of the found node 'nodeWithFewestAdjacents' if a node is found
+'-1' if all nodes are locked or the provided adjacency list is empty.
+It helps in selecting nodes for certain graph-based computations allowing to perform a smarter coarsening.
+It takes two parameters: 
+a vector of vector of pairs of integers 'adjacencyList' which is the adjacency list of the graph
+a vector of boolean values 'locked' which is used to keep track of nodes already coarsed and that should not be considered.
 
 ## `returnBestNode`
 
