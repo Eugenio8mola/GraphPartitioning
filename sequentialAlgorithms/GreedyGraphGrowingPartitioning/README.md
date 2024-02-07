@@ -1,3 +1,7 @@
+
+## Greedy Graph Growing Partitioning Algorithm
+
+
 ## Getting Started
 
 To use the programs in this repository, follow these steps:
@@ -7,12 +11,12 @@ To use the programs in this repository, follow these steps:
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/Eugenio8mola/GraphPartitioning.git
+   git clone https://github.com/Eugenio8mola/GraphPartitioning/sequentialAlgorithms/GreedyGraphGrowingPartitioning.git
 
 2. Navigate to the project directory:
 
    ```bash
-   cd GraphPartitioning
+   cd GraphPartitioning/sequentialAlgorithms/GreedyGraphGrowingPartitioning
    ```
 
 ### Compiling and Running
@@ -45,15 +49,15 @@ This constructor randomly generates a completed graph approximately.
 `saveAdjacencyList(graph g, int n, const string &filename)`
 
 This function receives three parameters and saves the graph in the format of the "Adjacency List" in the file. 
-1. the graph
-2. number of nodes
-3. the name of the file
+1. `g` the graph
+2. `n` number of nodes
+3. `filename` is the name of the file
 #
 `readAdjacencyList(const string &filename, graph &g)`
 
 This function receives two parameters and reads the graph from the file and puts it in a vector of vectors.
-1. The name of the file
-2. An object from the class of graph
+1. `filename` is the name of the file
+2. `g` An object from the class of graph
 #
 `get_vertex_weight(int vertex)`
 
