@@ -11,12 +11,13 @@ To use the programs in this repository, follow these steps:
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/Eugenio8mola/GraphPartitioning.git
+   git clone https://github.com/Eugenio8mola/GraphPartitioning/sequentialAlgorithms/multilevelKernighanLin.git
 
 2. Navigate to the project directory:
 
    ```bash
-   cd GraphPartitioning
+   GraphPartitioning/sequentialAlgorithms/multilevelKernighanLin
+
    ```
 
 ### Compiling and Running
