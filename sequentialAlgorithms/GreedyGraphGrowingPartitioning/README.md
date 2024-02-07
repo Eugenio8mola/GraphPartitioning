@@ -20,7 +20,7 @@ To use the programs in this repository, follow these steps:
 1. Compile the program using your preferred C++ compiler:
 
    ```bash
-   g++ -o partition main.cpp
+   g++ -o gggp main.cpp
    ```
 
 2. Run the program:
@@ -31,6 +31,8 @@ To use the programs in this repository, follow these steps:
 
    Replace `num_nodes` with the desired number of nodes that should be used for graph generation, `max_node_weight` with the maximum node weight that should be used for graph generation, and `num_partitions` with the desired number of partitions that should be applied.
 
+
+## Functions
 
 `graph(int n, int max_w)`
 
