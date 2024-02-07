@@ -1,3 +1,37 @@
+## Getting Started
+
+To use the programs in this repository, follow these steps:
+
+### Cloning the Repository
+
+1. Clone this repository to your local machine:
+
+   ```bash
+   git clone https://github.com/Eugenio8mola/GraphPartitioning.git
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd GraphPartitioning
+   ```
+
+### Compiling and Running
+
+1. Compile the program using your preferred C++ compiler:
+
+   ```bash
+   g++ -o partition main.cpp
+   ```
+
+2. Run the program:
+
+   ```bash
+   ./programName num_nodes max_node_weight num_partitions
+   ```
+
+   Replace `num_nodes` with the desired number of nodes that should be used for graph generation, `max_node_weight` with the maximum node weight that should be used for graph generation, and `num_partitions` with the desired number of partitions that should be applied.
+
+
 `graph(int n, int max_w)`
 
 In the class of the graph we have a constructor that receives two parameters:
@@ -66,37 +100,3 @@ This function receives the grap as an input and prints it in the output.
 `print_partitions(vector<vector<int>> result)`
 
 After splitting the graph in each iteration we will have two partitions, so we pass them to this function and it prints them in the output.
-
-
-## Getting Started
-
-To use the programs in this repository, follow these steps:
-
-### Cloning the Repository
-
-1. Clone this repository to your local machine:
-
-   ```bash
-   git clone https://github.com/Eugenio8mola/GraphPartitioning.git
-
-2. Navigate to the project directory:
-
-   ```bash
-   cd GraphPartitioning
-   ```
-
-### Compiling and Running
-
-1. Compile the program using your preferred C++ compiler:
-
-   ```bash
-   g++ -o partition main.cpp
-   ```
-
-2. Run the program:
-
-   ```bash
-   ./programName num_nodes max_node_weight num_partitions
-   ```
-
-   Replace `num_nodes` with the desired number of nodes that should be used for graph generation, `max_node_weight` with the maximum node weight that should be used for graph generation and `num_partitions` with the desired number of partitions that should be applied.
