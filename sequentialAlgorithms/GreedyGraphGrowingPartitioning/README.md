@@ -42,9 +42,8 @@ To use the programs in this repository, follow these steps:
    Replace `num_nodes` with the desired number of nodes that should be used for graph generation, `max_node_weight` with the maximum node weight that should be used for graph generation, and `num_partitions` with the desired number of partitions that should be applied.
 
 
-## Functions
 
-`graph(int n, int max_w)`
+##`graph(int n, int max_w)`
 
 In the class of the graph we have a constructor that receives two parameters:
 1. `n` number of nodes
