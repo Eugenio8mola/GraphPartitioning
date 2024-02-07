@@ -1,4 +1,5 @@
 `graph(int n, int max_w)`
+
 In the class of the graph we have a constructor that receives two parameters:
 1. number of nodes
 2. maximum weight for nodes 
