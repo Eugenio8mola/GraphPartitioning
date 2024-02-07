@@ -55,7 +55,8 @@ To use the programs in this repository, follow these steps:
    Replace `num_nodes` with the desired number of nodes that should be used for graph generation, `max_node_weight` with the maximum node weight that should be used for graph generation and `num_partitions` with the desired number of partitions that should be applied.
 
 ## Acknowledgments
-This is README provides general informations.
-Before running any of the algorithms implemented read the README attached inside the folder of the desired sequential or parallel algorithm that you are willing to execute.
+This is README provides general information.
+Each algorithm has its own README inside its folder.
+Before running any of the algorithms implemented, read the README of the desired sequential or parallel algorithm that you are willing to execute.
 Further details on execution mode, parameters to pass to run the program and functions used are provided.
 
