@@ -67,7 +67,7 @@ This function receives two parameters and reads the graph from the file and puts
 #
 `get_vertex_weight(int vertex)`
 
-This function receives the number of the node and then returns the weight of the node
+This function receives the number of the node `vertex` and then returns the weight of the node.
 #
 `total_vertex_weight()`
 
@@ -79,36 +79,35 @@ This function returns the maximum weight of all nodes.
 #
 `get_edge_weight(const pair<int, int>& edge)`
 
-this function receives a pair including two nodes and then returns the weight of edges:
+This function receives a pair `edge` including two nodes and then returns the weight of edges:
 if there exists an edge it returns the weight of the edge, otherwise it returns the 0.
 #
 `get_adjacent_vertices(int vertex)`
 
 This function receives the number of a node and then returns all nodes that are adjacent to it.
-The output of the function is a set<int>.
+The output of the function is a `set<int>`.
 #
 `make_new_graph(vector<int>& vec)`
 
-After splitting the graph in each iteration we call this function and pass the partitions to this function to generate two new graphs.
+After splitting the graph in each iteration we call this function and pass the partitions `vec` to this function to generate two new graphs.
 #
 `calculate_gain(graph& graph, int vertex, unordered_set<int>& E)`
 
 This function receives three parameters and calculates the gain in each iteration to select the maximum gain node.
-1. The graph
-2. A specific node
-3. a set of nodes that are adjacent to that node.
+1. `graph` The graph
+2. `vertex` A specific node
+3. `E` a set of nodes that are adjacent to that node.
 #
 `GGGP(graph& g, int np)`
 
-This function implements "the Greedy Graph Growing Partitioning algorithm (GGGP)".
-It receives two parameters:
-1. The graph
-2. The number of partitions
+This function implements "the Greedy Graph Growing Partitioning algorithm (GGGP)". It receives two parameters:
+1. `g` The graph
+2. `np` The number of partitions
 #
 `print(graph g)`
 
-This function receives the grap as an input and prints it in the output.
+This function receives the grap `g` as an input and prints it in the output.
 #
 `print_partitions(vector<vector<int>> result)`
 
-After splitting the graph in each iteration we will have two partitions, so we pass them to this function and it prints them in the output.
+After splitting the graph in each iteration we will have two partitions `result`, so we pass them to this function and it prints them in the output.
