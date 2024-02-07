@@ -1,6 +1,12 @@
 
 ## Greedy Graph Growing Partitioning Algorithm
 
+description 
+
+
+## Supported Platforms
+
+The programs in this repository can be run on Linux, Windows, and macOS. Ensure you have a C++ compiler installed on your system. If you're using Windows, consider using MinGW or Visual Studio. On macOS and Linux, the default system compiler should suffice.
 
 ## Getting Started
 
