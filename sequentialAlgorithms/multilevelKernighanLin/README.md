@@ -2,6 +2,39 @@
 
 Description of multiKL
 
+## Getting Started
+
+To use the programs in this repository, follow these steps:
+
+### Cloning the Repository
+
+1. Clone this repository to your local machine:
+
+   ```bash
+   git clone https://github.com/Eugenio8mola/GraphPartitioning.git
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd GraphPartitioning
+   ```
+
+### Compiling and Running
+
+1. Compile the program using your preferred C++ compiler:
+
+   ```bash
+   g++ -o partition main.cpp
+   ```
+
+2. Run the program:
+
+   ```bash
+   ./programName num_nodes max_node_weight num_partitions
+   ```
+
+   Replace `num_nodes` with the desired number of nodes that should be used for graph generation, `max_node_weight` with the maximum node weight that should be used for graph generation and `num_partitions` with the desired number of partitions that should be applied.
+
 ## `computePartitionWeights`
 
 The `computePartitionWeights` function calculates the total weight of each partition based on the nodes' weights. It takes two parameters: a vector of integers `partition` representing the partition IDs of nodes and a vector of integers `nodeWeights` representing the weights of nodes.
