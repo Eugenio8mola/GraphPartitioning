@@ -41,7 +41,7 @@ To use the programs in this repository, follow these steps:
 
    Replace `num_nodes` with the desired number of nodes that should be used for graph generation, `max_node_weight` with the maximum node weight that should be used for graph generation and `num_partitions` with the desired number of partitions that should be applied.
 
-## `computePartitionWeights`
+## `computePartitionWeights(const vector<int>& partition, vector<int>& nodeWeights)`
 
 The `computePartitionWeights` function calculates the total weight of each partition based on the nodes' weights. It takes two parameters: a vector of integers `partition` representing the partition IDs of nodes and a vector of integers `nodeWeights` representing the weights of nodes.
 
