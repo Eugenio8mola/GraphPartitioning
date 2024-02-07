@@ -1,7 +1,7 @@
 
 ## Greedy Graph Growing Partitioning Algorithm  
 
-<p style="text-align: justify;">The GGP algorithm consists of iteratively generating a set E that gathers half the
+<p style="text-align: justify">The GGP algorithm consists of iteratively generating a set E that gathers half the
 vertices of the graph G in terms of weight. This set E is initialized by randomly selecting
 a vertex in the graph. During the execution of the algorithm, the vertices of the graph are
 divided into three sets: the set E, the set of the vertices adjacent to E, called border of E
@@ -10,14 +10,14 @@ the vertices adjacent to the vertices of the set E are added to E, that is, E = 
 process ends when E contains a set of vertices which represents half of the total weight
 of the vertices of the graph. The algorithm then returns the bisection of the graph G
 whose first part is E.</p>
-<p style="text-align: justify;">If this method is very easy to implement, the quality of the partition obtained
+<p style="text-align: justify">If this method is very easy to implement, the quality of the partition obtained
 depends mainly on the starting vertex chosen. As we have seen, in the case of a
 multilevel method, the number of vertices of the coarsened graph to partition is very
 low, often less than 200. Thus, this algorithm can be executed several times – around
 ten times for example – with a starting vertex which is always different. The bisection
 of the lower cut will therefore be chosen as a partition for the refinement phase of the
 multilevel method.</p>
-<p style="text-align: justify;">The GGGP algorithm starts with the initialization of the set E. E is initialized as a set that only contains a vertex randomly
+<p style="text-align: justify">The GGGP algorithm starts with the initialization of the set E. E is initialized as a set that only contains a vertex randomly
 selected in V. The sets R and F can then be initialized. Each iteration of the algorithm
 consists of inserting in E the vertex of F that can reduce the most cut. This vertex,
 denoted by v, is the vertex of maximal gain of F. Then each vertex of R adjacent to v is
