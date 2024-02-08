@@ -1,6 +1,6 @@
 # Graph Partitioning
 
-This project provides implementations of various graph partitioning algorithms in C++ for efficient partitioning of large graphs. The implemented algorithms include Fiduccia-Mattheyses, multilevel Kernighan-Lin, Greedy Graph Growing Partitioning, and their parallel versions: Parallel Fiduccia-Mattheyses, Parallel multilevel Kernighan-Lin, Parallel Greedy Graph Growing Partitioning.  
+This project provides implementations of various graph partitioning algorithms in `C++` for efficient partitioning of large graphs. The implemented algorithms include Fiduccia-Mattheyses, multilevel Kernighan-Lin, Greedy Graph Growing Partitioning, and their parallel versions: Parallel Fiduccia-Mattheyses, Parallel multilevel Kernighan-Lin, Parallel Greedy Graph Growing Partitioning.  
 Each of these algorithms aims at providing the best partition of a given graph `G` such that:   
 1. node weights among partitions are `balanced`,  
 2. edge cut size is `minimized`.
@@ -61,8 +61,8 @@ To use the programs in this repository, follow these steps:
    `num_partitions` with the desired number of partitions that should be applied.  
 
 ## Acknowledgments
-This README provides general information.
-Each algorithm has its own README inside its folder.
-Before running any of the algorithms implemented, read the README of the desired sequential or parallel algorithm that you are willing to execute.
-Further details on execution mode, parameters to pass to run the program and functions used are provided.
+This `README`provides general information.  
+Each algorithm has its own `README` inside its folder.  
+Before running any of the algorithms implemented, read the `README` of the desired sequential or parallel algorithm that you are willing to execute.  
+Further details on execution mode, parameters to pass to run the program and functions used are provided.  
 
