@@ -4,7 +4,7 @@ Description of multiKL
 
 ## Supported Platforms
 
-The programs in this repository can be run on Linux, Windows, and macOS. Ensure you have a C++ compiler installed on your system. 
+The programs in this repository can be run on Linux, Windows, and macOS. Ensure you have a C++ compiler installed on your system.   
 If you're using Windows, consider using MinGW or Visual Studio. On macOS and Linux, the default system compiler should suffice.
 
 
@@ -41,6 +41,17 @@ To use the programs in this repository, follow these steps:
    ```
 
    Replace `num_nodes` with the desired number of nodes that should be used for graph generation, `max_node_weight` with the maximum node weight that should be used for graph generation and `num_partitions` with the desired number of partitions that should be applied.
+
+# GraphHandler Class
+
+The `GraphHandler` class provides functionality for handling graphs, including generating random graphs, printing graph information, saving and reading adjacency lists from files.
+
+## Constructors
+
+### First Constructor
+```cpp
+## `GraphHandler`
+Creates an empty GraphHandler object.   
 
 ## `computePartitionWeights`
 
@@ -90,17 +101,14 @@ It takes as parameter a Graph data structure `graph`
 ## `findNodeWithFewestAdjacents`
 
 The `findNodeWithFewestAdjacents` function finds the index of a node in the graph that has the fewest number of adjacent nodes, excluding locked nodes.
-
 It returns:
-
-the index of the found node 'nodeWithFewestAdjacents' if a node is found
-'-1' if all nodes are locked or the provided adjacency list is empty.
+the index of the found node 'nodeWithFewestAdjacents' if a node is found  
+'-1' if all nodes are locked or the provided adjacency list is empty.  
 It helps in selecting nodes for certain graph-based computations allowing to perform a smarter coarsening.
 
 It takes two parameters: 
-
-a vector of vector of pairs of integers 'adjacencyList' which is the adjacency list of the graph
-a vector of boolean values 'locked' which is used to keep track of nodes already coarsed and that should not be considered.
+a vector of vector of pairs of integers 'adjacencyList' which is the adjacency list of the graph  
+a vector of boolean values 'locked' which is used to keep track of nodes already coarsed and that should not be considered.  
 
 ## `returnBestNode`
 
