@@ -81,7 +81,7 @@ To use the programs in this repository, follow these steps:
 2. Run the program:
 
    ```bash
-   ./programName numberOfNode maxWeight number_partitions
+   ./parGGGP numberOfNode maxWeight number_partitions
    ```
 
    Replace `numberOfNode` with the desired number of nodes that should be used for graph generation, `maxWeight` with the maximum node weight that should be used for graph generation, and `number_partitions` with the desired number of partitions that should be applied.
