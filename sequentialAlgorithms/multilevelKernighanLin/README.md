@@ -102,8 +102,8 @@ Receives three parameters:
 
 Reads the adjacency list from the specified input file and saves it in in a vector of vectors of the specified `Graph` object.  
 Receives two parameters:  
-the name of the file `filename`   
-the `Graph g` in which the adjacency list should be saved 
+1. the name of the file `filename`   
+2. the `Graph g` in which the adjacency list should be saved 
 
 # Implemented methods
 
@@ -111,30 +111,30 @@ the `Graph g` in which the adjacency list should be saved
 
 The `computePartitionWeights` function calculates the total weight of each partition based on the nodes' weights.   
 It takes two parameters:  
-a vector of integers `partition` representing the partition number to which nodes belong to.  
-a vector of integers `nodeWeights` representing the weights of nodes.  
+1. the vector of integers `partition` representing the partition number to which nodes belong to.  
+2. the vector of integers `nodeWeights` representing the weights of nodes.  
 
 ## `computeCutCost`
 
 The `computeCutCost` function calculates the cut cost for a given partition in a graph, which represents the sum of weights of edges crossing the partition boundary.  
 It takes two parameters:  
-a Graph data structure `myGraph`  
-a partition vector `partition` specifying the current partition assigned to each node.  
+1. the Graph data structure `myGraph`  
+2. the partition vector `partition` specifying the current partition assigned to each node.  
 
 ## `kernighanLin`
 
 The `kernighanLin` function implements the Kernighan-Lin algorithm, which iteratively improves the quality of the partition by swapping pairs of nodes to reduce the cut cost.  
 It takes two parameters:  
-a Graph data structure `myGraph`  
-a partition vector `partition` specifying the current partition assigned to each node.  
+1. the Graph data structure `myGraph`  
+2. the partition vector `partition` specifying the current partition assigned to each node.  
 
 ## `isPowerOf2`
 
-The `isPowerOf2` function checks if both the input integer `k` and the size of the graph are powers of 2.  
+The `isPowerOf2` function checks if both the input integer `k` and the size of the graph in terms of number of nodes `n` are powers of 2.  
 It utilizes bitwise operations to determine whether a number is a power of 2.  
 It takes two parameters:   
-the number of partitions to apply `k`.  
-a Graph data structure `myGraph` used to obtain the size of the generated graph.
+1. the number of partitions to apply `k`.  
+2. the Graph data structure `myGraph` used to obtain the size of the generated graph.
 
 
 ## `isContiguous`
@@ -147,16 +147,32 @@ It takes as parameter a Graph data structure `graph`
 
 The `findNodeWithFewestAdjacents` function finds the index of a node in the graph that has the fewest number of adjacent   nodes, excluding locked nodes.  
 It returns:  
-the index of the found node 'nodeWithFewestAdjacents' if a node is found   
-'-1' if all nodes are locked or the provided adjacency list is empty.   
+1. 'nodeWithFewestAdjacents' the index of the found node, if a node is found   
+2. '-1' if all nodes are locked or the provided adjacency list is empty.   
 It helps in selecting nodes for certain graph-based computations allowing to perform a smarter coarsening.  
 It takes two parameters:  
-a vector of vector of pairs of integers 'adjacencyList' which is the adjacency list of the graph  
-a vector of boolean values 'locked' which is used to keep track of nodes already coarsed and that should not be considered.  
+1. the vector of vector of pairs of integers 'adjacencyList' which is the adjacency list of the graph  
+2. the vector of boolean values 'locked' which is used to keep track of nodes already coarsed and that should not be considered.  
 
 ## `returnBestNode`
 
-The `returnBestNode` function finds the best node connected to a node with the fewest adjacents, considering the weight of connected nodes and edges. It returns the index of the best node satisfying certain criteria.
+The `returnBestNode` function finds the best node to coarse in order to generate a `supernode`.
+The `bestNode` is selected among the ones in the adjacency list of the node with the fewest number of adjacents returned by the function `findNodeWithFewestAdjacents`.  
+This function selects appropriately the best matching node considering the sum of the node weights of the nodes to merge and compares it with a `threshold`computed on the entire node weigth set.  
+Together with the `threshold` two intervals are also passed.  
+This procedure turns the coarsening process into a `smart coarsening`.
+The method returns:
+the `pair<int, int>` = `(bestNode,edgeWeight)` in which:  
+`bestNode` is the index of the best node found   
+`edgeWeight` is the edge weight of the best node found.  
+It takes six parameters:  
+1. the Graph data structure `myGraph`  
+2. the node for which the best pairing needs to be determined `nodeWithFewestAdjacents`   
+3. the threshold parameter setting a condition for selecting the best pairing node `threshold`, nodes that meet or exceed this threshold are considered suitable candidates for pairing.   
+4. the vector `maxInt` that constrains the selection of pairing nodes based on one of the corresponding maximum values specified in this vector used as correction factor to the `threshold` value.   
+5. the vector `minInt` that constrains the selection of pairing nodes based on one of the corresponding minimum values specified in this vector used as correction factor to the `threshold` value. 
+6. the boolean vector `locked` indicating whether each node in the graph is locked or not. 
+   Locked nodes are excluded from consideration as potential pairing candidates, ensuring that they remain unchanged during the pairing process.  
 
 ## `removeElementsFromAdjacency`
 
