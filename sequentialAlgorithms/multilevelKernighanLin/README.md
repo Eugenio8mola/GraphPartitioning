@@ -169,8 +169,8 @@ It takes six parameters:
 1. the Graph class `myGraph`  
 2. the node for which the best pairing needs to be determined `nodeWithFewestAdjacents`   
 3. the threshold parameter setting a condition for selecting the best pairing node `threshold`, nodes that meet or exceed this threshold are considered suitable candidates for pairing.   
-4. the vector `maxInt` that constrains the selection of pairing nodes based on one of the corresponding maximum values specified in this vector used as correction factor to the `threshold` value.   
-5. the vector `minInt` that constrains the selection of pairing nodes based on one of the corresponding minimum values specified in this vector used as correction factor to the `threshold` value. 
+4. the vector `maxInt` that constrains the selection of pairing nodes based on one of the corresponding maximum values specified in this vector used as correction factor to the threshold value.   
+5. the vector `minInt` that constrains the selection of pairing nodes based on one of the corresponding minimum values specified in this vector used as correction factor to the threshold value. 
 6. the boolean vector `locked` indicating whether each node in the graph is locked or not. 
    Locked nodes are excluded from consideration as potential pairing candidates, ensuring that they remain unchanged during the pairing process.  
 
@@ -193,15 +193,16 @@ A double reference structure is used in order to keep track of already coarsed n
 The result is achieved by defining the vector of vectors of bolean values `marked` in order to mark nodes already coarsed and tell the program to don't check them again for a possible coarsing. 
 The function `removeElementsFromAdjacency` is called to remove a pair from the adjacency list.    
 The entry of the `marked` vector of vectors of bolean values associated with the removed pair is also removed due to the correspondence created between the two structures.   
-The node pairs removed are all specified in `pairList` `vector<vector<pair<int,int>>>`.  
+The node pairs removed are all specified in the `vector<vector<pair<int,int>>>` `pairList`.  
 Removed pairs are then replaced by the generated `supernode`.  
 The function takes six parameters:  
-1. the Graph class `myGraph` representing the graph structure to be modified. It is passed by reference to allow direct modification of the original graph.  
-2. pairList  This vector of vectors contains pairs of nodes representing the pairings that need to be considered for updating the adjacency list.  
-3. NewAdjacencyList This vector of vectors represents the updated adjacency list after the function execution. It is modified within the function.  
-4. allNodes  This vector contains all the nodes in the graph, typically used to iterate over each node and determine the pairings.  
-5. newNodeWeights This vector stores the weights of nodes in the graph after the adjacency list is updated.  
-6. sizeCounter  This integer reference tracks the size of the adjacency list after modifications.
+1. the Graph class `myGraph`
+2. the vector of vectors `pairList` containing pairs of nodes representing the pairings that need to be considered for updating the adjacency list.  
+3. the vector of vectors `NewAdjacencyList` representing the updated adjacency list after the function execution.  
+   It is modified within the function.  
+4. the vector `allNodes` containing the list of nodes used to apply changes to the adjacency list.
+5. the vector `newNodeWeights` storing the weights of nodes in the graph after the adjacency list is updated.  
+6. the integer `sizeCounter` tracking the size of the adjacency list after modifications.
    
 ## `coarseGraph`
 
@@ -213,11 +214,20 @@ The `uncoarseGraph` function reconstructs partitioning information for an uncoar
 
 ## `assignPartition`
 
-The `assignPartition` function initializes a partition vector with consecutive partition numbers starting from 1 up to `k`.
+The `assignPartition` function assigns the partition to the graph, when the coarsest graph is obtained.  
+`k` partitions are assigned, one for each element of the `partition` vector.  
+Partition numbers are consecutive, they start from `1` and go up to `k`.  
+Receives as parameter the vector `partition`.  
 
 ## `multilevelKL`
 
-The `multilevelKL` function implements a multilevel graph partitioning algorithm based on the Kernighan-Lin heuristic. It recursively coarsens the graph, applies KL partitioning at each level, and then uncoarsens the graph.
+The `multilevelKL` function acts as a `wrapper` implementing a multilevel graph partitioning algorithm based on the Kernighan-Lin heuristic.  
+It recursively coarsens the graph, uncoarsens the graph and applies KL partitioning at each level.
+It receives four paramters:  
+1. the input graph to be partitioned `multilevelGraph`.  
+2. the vector `partition` storing the initial partition assignments for each node.
+3. the value `partitionSize` referencing the size of the partition.  
+4. the number of nodes `n` in the graph.  
 
 For detailed usage and examples of each function, refer to the respective source code files in this repository.
 
