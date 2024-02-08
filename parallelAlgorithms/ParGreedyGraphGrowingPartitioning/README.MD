@@ -39,12 +39,12 @@ To use the programs in this repository, follow these steps:
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/Eugenio8mola/GraphPartitioning/sequentialAlgorithms/GreedyGraphGrowingPartitioning.git
+   git clone https://github.com/Eugenio8mola/GraphPartitioning/parallelAlgorithms/ParGreedyGraphGrowingPartitioning.git
 
 2. Navigate to the project directory:
 
    ```bash
-   cd GraphPartitioning/sequentialAlgorithms/GreedyGraphGrowingPartitioning
+   cd GraphPartitioning/parallelAlgorithms/ParGreedyGraphGrowingPartitioning
    ```
 
 ### Compiling and Running
@@ -52,7 +52,7 @@ To use the programs in this repository, follow these steps:
 1. Compile the program using your preferred C++ compiler:
 
    ```bash
-   g++ -o gggp main.cpp
+   g++ -o parGGGP main.cpp
    ```
 
 2. Run the program:
