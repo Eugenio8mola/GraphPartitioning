@@ -26,7 +26,7 @@ To use the programs in this repository, follow these steps:
 2. Navigate to the project directory:
 
    ```bash
-   GraphPartitioning/sequentialAlgorithms/multilevelKernighanLin
+   cd GraphPartitioning/sequentialAlgorithms/multilevelKernighanLin
 
    ```
 
