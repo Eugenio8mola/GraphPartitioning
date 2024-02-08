@@ -149,7 +149,8 @@ The `findNodeWithFewestAdjacents` function finds the index of a node in the grap
 It helps in selecting nodes allowing to perform a smarter coarsening.  
 It returns:  
 + `nodeWithFewestAdjacents` the index of the found node, if a node is found   
-+ `-1` if all nodes are locked or the provided adjacency list is empty.    
++ `-1` if all nodes are locked or the provided adjacency list is empty.
++   
 It takes two parameters:  
 1. the vector of vector of pairs of integers `adjacencyList` which is the adjacency list of the graph  
 2. the vector of boolean values `locked` which is used to keep track of nodes already coarsed and that should not be considered.  
@@ -161,10 +162,11 @@ The `bestNode` is selected among the ones in the adjacency list of the node with
 This function selects appropriately the best matching node considering the sum of the node weights of the nodes to merge and compares it with a `threshold`computed on the entire node weigth set.  
 Together with the `threshold` two intervals are also passed.  
 This procedure turns the coarsening process into a `smart coarsening`.
-The method returns:
-the `pair<int, int>` = `(bestNode,edgeWeight)` in which:  
+The method returns:  
++ the `pair<int, int>` = `(bestNode,edgeWeight)` in which:  
 `bestNode` is the index of the best node found   
-`edgeWeight` is the edge weight of the best node found.  
+`edgeWeight` is the edge weight of the best node found.
+
 It takes six parameters:  
 1. the Graph class `myGraph`  
 2. the node for which the best pairing needs to be determined `nodeWithFewestAdjacents`   
