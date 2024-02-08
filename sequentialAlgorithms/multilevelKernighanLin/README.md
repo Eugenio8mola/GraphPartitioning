@@ -1,9 +1,20 @@
 # Multilevel Kernighan-Lin
-
-<p align="justify">Description of multiKL 
-
-
-
+<p align="justify">The multilevel Kernighan-Lin algorithm is a graph partitioning technique that adopts an advanced stategy to efficiently divide a graph of `n` nodes in `k` partitions. (with `n` and `k` powers of 2)  
+This technique completes the Kernighan-Lin algorithm for graph partitioning, which considers only the edge weights (node weights are considered to be all equal to 1), by considering also the node weights in order to produce partitions whose total node weigth is balanced and whose edge cut size is minimized.   
+It employs a strategy based on a divide and conquer approach: 
+The initial graph is coarsed into a smaller one by recursive calls to the `coarseGraph` method. 
+Coarsing involves merging multiple vertices into "supernodes" to reduce the graph's size.  
+The process is iterated until a sufficiently small graph is obtained, which generally coincides with the size of the graph equal to the number of partitions `k`, which is the stopping condition.
+Once the coarsest graph is achieved, the initial partition is applied.
+Each node `n` is assigned to one of the `k` partitions.
+After obtaining a partition for the coarsest graph, the algorithm gradually unfolds the partitioning to finer levels of the original graph. This is done by recursively refining the partitioning obtained at each coarsening level.   
+As the algorithm uncoarsens the graph, it refines the partitioning by unfoilding the merged node pairs instead of the supernodes, and reconstruction the adjacency list of the graph, ensuring the partitioning is more accurate.  
+The process is iterated recursively until the original graph is fully reconstructed.  
+At each uncoarsening step, the refinement process is applied.  
+It involves refining the partitioning obtained from the previous coarsening level.   
+This refinement can involve local optimization techniques, such as the `Kernighan-Lin algorithm`, to further improve the partition quality or other algorithms that can be used to perform the refinement.  
+The application of the Kernighan-Lin algorithm involves iteratively moving vertices between the partitions to improve a predefined objective function, such as minimizing edge cuts.  
+By employing coarsening and uncoarsening strategies, the multilevel Kernighan-Lin algorithm effectively balances the trade-off between partition quality and computational efficiency, making it suitable for partitioning large graphs efficiently while maintaining partition quality and preserving the original graph structure. 
 </p>
 
 ## Supported Platforms
