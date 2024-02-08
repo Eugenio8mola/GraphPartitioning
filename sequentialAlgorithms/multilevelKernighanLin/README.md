@@ -207,8 +207,7 @@ The function takes six parameters:
 ## `coarseGraph`
 
 The `coarseGraph` function performs graph coarsening by merging nodes based on certain criteria, updating the graph   structure, adjacency list, node weights and returning a coarser graph.  
-Computations performed involve multiple calls to the `updateAdjacencyList` function, the `returnBestNode` function and the  
-`findNodeWithFewestAdjacents` function.  
+Computations performed involve multiple calls to the `updateAdjacencyList` function, the `returnBestNode` function and the `findNodeWithFewestAdjacents` function.  
 Selected pairs of nodes are merged into `supernodes` and a `pairList` storing the pairs used for the merging process is generated.  
 Returns:  
 the Graph class `copyGraph` which is the graph at the `n-1` coarsening stage that will be used recursively in the uncoarsening process.   
