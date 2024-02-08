@@ -210,7 +210,8 @@ The `coarseGraph` function performs graph coarsening by merging nodes based on c
 Computations performed involve multiple calls to the `updateAdjacencyList` function, the `returnBestNode` function and the `findNodeWithFewestAdjacents` function.  
 Selected pairs of nodes are merged into `supernodes` and a `pairList` storing the pairs used for the merging process is generated.  
 Returns:  
--the Graph class `copyGraph` which is the graph at the `n-1` coarsening stage that will be used recursively in the uncoarsening process.   
++ the Graph class `copyGraph` which is the graph at the `n-1` coarsening stage that will be used recursively in the 
+  uncoarsening process.   
 It receives three parameters:   
 1. the input graph to be coarsed `myGraph`.    
 2. the vector `partition` storing the partition assignments for each node of the input graph to be coarsed.  
