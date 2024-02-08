@@ -147,12 +147,12 @@ It takes as parameter a Graph data structure `graph`
 
 The `findNodeWithFewestAdjacents` function finds the index of a node in the graph that has the fewest number of adjacent   nodes, excluding locked nodes.  
 It returns:  
-1. 'nodeWithFewestAdjacents' the index of the found node, if a node is found   
-2. '-1' if all nodes are locked or the provided adjacency list is empty.   
+1. `nodeWithFewestAdjacents` the index of the found node, if a node is found   
+2. `-1` if all nodes are locked or the provided adjacency list is empty.   
 It helps in selecting nodes for certain graph-based computations allowing to perform a smarter coarsening.  
 It takes two parameters:  
-1. the vector of vector of pairs of integers 'adjacencyList' which is the adjacency list of the graph  
-2. the vector of boolean values 'locked' which is used to keep track of nodes already coarsed and that should not be considered.  
+1. the vector of vector of pairs of integers `adjacencyList` which is the adjacency list of the graph  
+2. the vector of boolean values `locked` which is used to keep track of nodes already coarsed and that should not be considered.  
 
 ## `returnBestNode`
 
