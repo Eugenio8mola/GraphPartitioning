@@ -211,8 +211,9 @@ Computations performed involve multiple calls to the `updateAdjacencyList` funct
 Selected pairs of nodes are merged into `supernodes` and a `pairList` storing the pairs used for the merging process is generated.  
 Returns:  
 + the Graph class `copyGraph` which is the graph at the `n-1` coarsening stage that will be used recursively in the 
-  uncoarsening process.   
-It receives three parameters:   
+  uncoarsening process.
+  
+  It receives three parameters:   
 1. the input graph to be coarsed `myGraph`.    
 2. the vector `partition` storing the partition assignments for each node of the input graph to be coarsed.  
 3. the reference to the size of the partition `partitionSize`.  
