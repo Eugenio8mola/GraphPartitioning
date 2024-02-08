@@ -94,6 +94,8 @@ Receives two parameters:
 the name of the file `filename`   
 the `Graph g` in which the adjacency list should be saved 
 
+# Implemented methods
+
 ## `computePartitionWeights`
 
 The `computePartitionWeights` function calculates the total weight of each partition based on the nodes' weights.   
