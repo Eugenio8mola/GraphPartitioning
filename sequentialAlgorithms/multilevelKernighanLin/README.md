@@ -176,8 +176,13 @@ It takes six parameters:
 
 ## `removeElementsFromAdjacency`
 
-The `removeElementsFromAdjacency` function selectively removes elements from the adjacency list and the corresponding `marked` matrix for a specific node, based on specified positions.ù
-It takes six parameters:  
+The `removeElementsFromAdjacency` function removes elements from the adjacency list.  
+The corresponding element is removed also from the `marked` matrix in the same position.  
+It takes four parameters:    
+1. the index `i` of the row in the adjacency list from which elements need to be removed.  
+2. `keepPositionOfL` This vector contains the positions of elements that need to be kept in the adjacency list. Elements at positions not included in this vector will be removed.  
+3. `marked`  This vector of vectors represents the marked matrix associated with the adjacency list. It is modified along with the adjacency list.  
+4. `NewAdjacencyList`  This vector of vectors represents the adjacency list from which elements are to be removed. It is modified within the function.  
 
 ## `updateAdjacencyList`
 
@@ -186,11 +191,12 @@ It squeezes the original adjacency list into a new smaller one resulting from th
 Each `supernode` together with its index and edge weigth is put inside the new generated adjacency list.  
 A double reference structure is used in order to keep track of already coarsed nodes added in the `adjacencyList`.  
 The result is achieved by defining the vector of vectors of bolean values `marked` in order to mark nodes already coarsed and tell the program to don't check them again for a possible coarsing. 
-The function `removeElementsFromAdjacency` is used to remove a pair from the adjacency list and add its updated version. 
-The entry of the `marked`  vector of vectors of bolean associated with the removed pair is also removed.  
-
-It takes six parameters:  
-1. `myGraph` This parameter represents the graph structure to be modified. It is passed by reference to allow direct modification of the original graph.  
+The function `removeElementsFromAdjacency` is called to remove a pair from the adjacency list.    
+The entry of the `marked` vector of vectors of bolean values associated with the removed pair is also removed due to the correspondence created between the two structures.   
+The node pairs removed are all specified in `pairList` `vector<vector<pair<int,int>>>`.  
+Removed pairs are then replaced by the generated `supernode`.  
+The function takes six parameters:  
+1. the Graph class `myGraph` representing the graph structure to be modified. It is passed by reference to allow direct modification of the original graph.  
 2. pairList  This vector of vectors contains pairs of nodes representing the pairings that need to be considered for updating the adjacency list.  
 3. NewAdjacencyList This vector of vectors represents the updated adjacency list after the function execution. It is modified within the function.  
 4. allNodes  This vector contains all the nodes in the graph, typically used to iterate over each node and determine the pairings.  
