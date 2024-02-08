@@ -180,9 +180,9 @@ The `removeElementsFromAdjacency` function removes elements from the adjacency l
 The corresponding element is removed also from the `marked` matrix in the same position.  
 It takes four parameters:    
 1. the index `i` of the row in the adjacency list from which elements need to be removed.  
-2. `keepPositionOfL` This vector contains the positions of elements that need to be kept in the adjacency list. Elements at positions not included in this vector will be removed.  
-3. `marked`  This vector of vectors represents the marked matrix associated with the adjacency list. It is modified along with the adjacency list.  
-4. `NewAdjacencyList`  This vector of vectors represents the adjacency list from which elements are to be removed. It is modified within the function.  
+2. the vector `keepPositionOfL` contains the shift to apply to the adacency list in order to compute the positions of elements that need to be removed.  
+3. the vector of vectors `marked` representing the marked matrix associated with the adjacency list.  It is modified along with the adjacency list.   
+4. the vector of vectors `NewAdjacencyList` representing the adjacency list from which elements have to be removed.  It is modified within the function.  
 
 ## `updateAdjacencyList`
 
@@ -206,18 +206,36 @@ The function takes six parameters:
    
 ## `coarseGraph`
 
-The `coarseGraph` function performs graph coarsening by merging nodes based on certain criteria, updating the graph structure, and returning a coarser-level graph.
+The `coarseGraph` function performs graph coarsening by merging nodes based on certain criteria, updating the graph  structure, adjacency list, node weights and returning a coarser graph. 
+Computations performed involve multiple calls to the `updateAdjacencyList` function, the `returnBestNode` function and the  
+`findNodeWithFewestAdjacents` function.
+Selected pairs of nodes are merged into `supernodes` and a `pairList` storing the pairs used for the merging process is generated.  
+Returns:  
+the Graph class `copyGraph` which is the graph at the n-1 coarsening stage that will be used recursively in the uncoarsening process.   
+It receives three parameters:   
+1. the input graph to be coarsed `myGraph`.    
+2. the vector `partition` storing the partition assignments for each node of the input graph to be coarsed.  
+3. the reference to the size of the partition `partitionSize`.  
 
 ## `uncoarseGraph`
 
-The `uncoarseGraph` function reconstructs partitioning information for an uncoarsened graph after a graph coarsening operation.
+The `uncoarseGraph` function reconstructs partitioning information for a graph that has been coarsed, computes the total  
+weight of a partition and calculates the cut cost for the reconstructed partition.   
+The reconstruction is performed by exploiting the pairs contained in `pairList` and assigning to the pairs the same  
+partition of the `supernodes` originated by their merging.  
+It receives four parameters:  
+1. the recursively uncoarsed graph `copyGraph`  
+2. the coarsed graph `multilevelGraph`    
+3. the vector `partition` storing the partition of the coarsed graph for each node.  
+4. the value `partitionSize` referencing the size of the partition.   
+5. the number of nodes `n` in the graph.    
 
 ## `assignPartition`
 
-The `assignPartition` function assigns the partition to the graph, when the coarsest graph is obtained.  
-`k` partitions are assigned, one for each element of the `partition` vector.  
-Partition numbers are consecutive, they start from `1` and go up to `k`.  
-Receives as parameter the vector `partition`.  
+The `assignPartition` function assigns the partition to the graph, when the coarsest graph is obtained.    
+`k` partitions are assigned, one for each element of the `partition` vector.    
+Partition numbers are consecutive, they start from `1` and go up to `k`.    
+Receives as parameter the vector `partition`.   
 
 ## `multilevelKL`
 
