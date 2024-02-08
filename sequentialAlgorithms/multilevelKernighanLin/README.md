@@ -40,7 +40,10 @@ To use the programs in this repository, follow these steps:
    ./programName num_nodes max_node_weight num_partitions
    ```
 
-   Replace `num_nodes` with the desired number of nodes that should be used for graph generation, `max_node_weight` with the maximum node weight that should be used for graph generation and `num_partitions` with the desired number of partitions that should be applied.
+   Replace:  
+   `num_nodes` with the desired number of nodes that should be used for graph generation,  
+   `max_node_weight` with the maximum node weight that should be used for graph generation,  
+   `num_partitions` with the desired number of partitions that should be applied.
 
 # GraphHandler Class
 
@@ -53,9 +56,9 @@ The `GraphHandler` class provides functionality for handling graphs, including g
 ## `GraphHandler`
 Creates an empty GraphHandler object.   
 
-## Second Constructor
+### Second Constructor
 
-### `GraphHandler(int n, int max_w)`
+## `GraphHandler(int n, int max_w)`
 
 Creates a `GraphHandler` object, a random graph with:  
 number of nodes `n`    
