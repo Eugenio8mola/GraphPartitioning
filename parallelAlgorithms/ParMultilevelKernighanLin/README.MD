@@ -18,6 +18,34 @@ This refinement can involve local optimization techniques, such as the `Kernigha
 The application of the Kernighan-Lin algorithm involves iteratively moving vertices between the partitions to improve a predefined objective, such as minimizing edge cuts.   
 By employing coarsening and uncoarsening strategies, the multilevel Kernighan-Lin algorithm effectively balances the trade-off between partition quality and computational efficiency, making it suitable for partitioning large graphs efficiently while maintaining partition quality and preserving the original graph structure.  
 
+### Multithreading Section
+
+The multithreading approach aims to improve performance by utilizing multiple CPU cores for parallel computation, thereby potentially reducing the overall execution time. We initialize two threads (Th1 and Th2) to concurrently execute the GGGP function on two subgraphs (g1 and g2):
+
+`step1`: Thread Creation:
+
+Two thread objects (Th1 and Th2) are declared.
+Each thread is responsible for executing the GGGP function on a separate subgraph.
+
+`step2`: Conditional Thread Launch:
+
+The decision to launch a thread is based on the size of the subgraph partitions (partitions[0] and partitions[1]).
+If a partition contains at least two vertices (partitions[i].size() >= 2), a corresponding thread is created to process the subgraph.
+
+`step3`: Thread Execution:
+
+The GGGP function is called recursively on the subgraph using the std::thread constructor.
+Each thread is assigned a subgraph (g1 or g2) and the same partitioning depth (`np` as a number of partitions in each iteration).
+
+`step4`: Thread Synchronization:
+
+After launching both threads, the main thread waits for their completion before proceeding further.
+The join() method is called on each thread object (Th1.join() and Th2.join()), which blocks the main thread until the associated thread finishes execution.
+
+## Supported Platforms
+
+The programs in this repository can be run on Linux, Windows, and macOS. Ensure you have a C++ compiler installed on your system. If you're using Windows, consider using MinGW or Visual Studio. On macOS and Linux, the default system compiler should suffice.
+
 ## Supported Platforms
 
 The programs in this repository can be run on Linux, Windows, and macOS. Ensure you have a C++ compiler installed on your system.   
