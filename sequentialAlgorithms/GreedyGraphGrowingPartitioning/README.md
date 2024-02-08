@@ -127,11 +127,11 @@ This function implements "the Greedy Graph Growing Partitioning algorithm (GGGP)
 1. `g` The graph
 2. `np` The number of partitions
 
-## isPowerOf2  
+## `isPowerOf2`
 
 This function has one input and gets the `np` as the number of partitions then checks whether it is a multiple of a power of 2 or not.
 
-## DFS
+## `DFS`
 
 The DFS function is a recursive function that performs depth-first search traversal starting from a given vertex in the graph. This function has three parameters and is used in the function of `isContiguous` to check that the graph is contiguous or not:
 
@@ -139,7 +139,7 @@ The DFS function is a recursive function that performs depth-first search traver
 2. `visited`: This parameter is a reference to a boolean vector indicating whether each vertex has been visited during the DFS traversal. Initially, all elements of this vector are set to false to indicate that no vertices have been visited.
 3. `vertex`: This parameter represents the current vertex being visited during the DFS traversal. Initially, this will be the starting vertex of the traversal.
 
-## isContiguous
+## `isContiguous`
 
 This function gets the `graph` as an input and then uses depth-first search (DFS) algorithms to traverse the graph and check if all vertices are reachable from any arbitrary starting vertex. If all vertices are reachable, then the graph is contiguous and returns `true` otherwise it returns `false`.
 
