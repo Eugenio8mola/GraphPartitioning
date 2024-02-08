@@ -136,7 +136,8 @@ It takes two parameters:
 ## `isPowerOf2`
 
 The `isPowerOf2` function checks if both the input integer `k` and the size of the graph in terms of number of nodes `n` are powers of 2.  
-It utilizes bitwise operations to determine whether a number is a power of 2.  
+It utilizes bitwise operations to determine whether `k` and `n` are powers of 2. 
+If this condition is not satisfied it prints an `ERROR`.  
 
 It takes two parameters:   
 1. the number of partitions to apply `k`.  
@@ -147,7 +148,8 @@ It takes two parameters:
 
 The `isContiguous` function checks whether the generated graph is contiguous (connected) using Depth-First Search (DFS) traversal.  
 It ensures that all nodes in the graph are visited, indicating connectivity.  
-It takes as parameter a Graph data structure `graph`  
+If this condition is not satisfied it prints an `ERROR`.  
+It takes as parameter a Graph data structure `graph`.    
 
 ## `findNodeWithFewestAdjacents`
 
@@ -226,7 +228,7 @@ Returns:
 + the Graph class `copyGraph` which is the graph at the `n-1` coarsening stage that will be used recursively in the 
   uncoarsening process.
   
-  It receives three parameters:   
+It receives three parameters:   
 1. the input graph to be coarsed `myGraph`.    
 2. the vector `partition` storing the partition assignments for each node of the input graph to be coarsed.  
 3. the reference to the size of the partition `partitionSize`.  
