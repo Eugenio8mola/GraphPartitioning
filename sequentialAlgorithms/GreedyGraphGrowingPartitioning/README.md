@@ -61,7 +61,7 @@ To use the programs in this repository, follow these steps:
    ./programName numberOfNode maxWeight number_partitions
    ```
 
-   Replace `num_nodes` with the desired number of nodes that should be used for graph generation, `max_node_weight` with the maximum node weight that should be used for graph generation, and `num_partitions` with the desired number of partitions that should be applied.
+   Replace `numberOfNode` with the desired number of nodes that should be used for graph generation, `maxWeight` with the maximum node weight that should be used for graph generation, and `number_partitions` with the desired number of partitions that should be applied.
 
 ### Functions
 
