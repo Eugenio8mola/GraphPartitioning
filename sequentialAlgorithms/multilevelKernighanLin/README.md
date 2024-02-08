@@ -35,13 +35,13 @@ To use the programs in this repository, follow these steps:
 1. Compile the program using your preferred C++ compiler:
 
    ```bash
-   g++ -o partition main.cpp
+   g++ -o multilevelKL main.cpp
    ```
 
 2. Run the program:
 
    ```bash
-   ./programName num_nodes max_node_weight num_partitions
+   ./multilevelKL num_nodes max_node_weight num_partitions
    ```
 
    Replace:  
