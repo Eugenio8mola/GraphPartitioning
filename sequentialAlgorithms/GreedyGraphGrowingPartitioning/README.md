@@ -128,7 +128,7 @@ If the adjacent `vertex` belongs to set `E`, the weight of the edge between the 
 If the adjacent `vertex` does not belong to set `E`, the weight of the edge between the given `vertex` and the adjacent `vertex` is subtracted from the gain.  
 The resulting gain value reflects the net effect of adjacent vertices on the partitioning decision regarding the given `vertex`.  
 Return Value:  
-+ The function returns the computed gain value for the specified `vertex`.
++ `gain` the value of the computed gain for the specified vertex.
 
 ## `GGGP`
 
