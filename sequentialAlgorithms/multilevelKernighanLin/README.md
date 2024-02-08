@@ -118,14 +118,14 @@ It takes two parameters:
 
 The `computeCutCost` function calculates the cut cost for a given partition in a graph, which represents the sum of weights of edges crossing the partition boundary.  
 It takes two parameters:  
-1. the Graph data structure `myGraph`  
+1. the Graph class `myGraph`  
 2. the partition vector `partition` specifying the current partition assigned to each node.  
 
 ## `kernighanLin`
 
 The `kernighanLin` function implements the Kernighan-Lin algorithm, which iteratively improves the quality of the partition by swapping pairs of nodes to reduce the cut cost.  
 It takes two parameters:  
-1. the Graph data structure `myGraph`  
+1. the Graph class `myGraph`  
 2. the partition vector `partition` specifying the current partition assigned to each node.  
 
 ## `isPowerOf2`
@@ -166,7 +166,7 @@ the `pair<int, int>` = `(bestNode,edgeWeight)` in which:
 `bestNode` is the index of the best node found   
 `edgeWeight` is the edge weight of the best node found.  
 It takes six parameters:  
-1. the Graph data structure `myGraph`  
+1. the Graph class `myGraph`  
 2. the node for which the best pairing needs to be determined `nodeWithFewestAdjacents`   
 3. the threshold parameter setting a condition for selecting the best pairing node `threshold`, nodes that meet or exceed this threshold are considered suitable candidates for pairing.   
 4. the vector `maxInt` that constrains the selection of pairing nodes based on one of the corresponding maximum values specified in this vector used as correction factor to the `threshold` value.   
@@ -176,12 +176,27 @@ It takes six parameters:
 
 ## `removeElementsFromAdjacency`
 
-The `removeElementsFromAdjacency` function selectively removes elements from the adjacency list and the corresponding marked matrix for a specific node, based on specified positions.
+The `removeElementsFromAdjacency` function selectively removes elements from the adjacency list and the corresponding `marked` matrix for a specific node, based on specified positions.ù
+It takes six parameters:  
 
 ## `updateAdjacencyList`
 
-The `updateAdjacencyList` function updates the adjacency list and related data structures of a graph based on specified pairs of nodes and their weights.
+The `updateAdjacencyList` function is responsible of the updating of the adjacency list of a graph right after it gets coarsed.
+It squeezes the original adjacency list into a new smaller one resulting from the merging of two nodes into a `supernode`.  
+Each `supernode` together with its index and edge weigth is put inside the new generated adjacency list.  
+A double reference structure is used in order to keep track of already coarsed nodes added in the `adjacencyList`.  
+The result is achieved by defining the vector of vectors of bolean values `marked` in order to mark nodes already coarsed and tell the program to don't check them again for a possible coarsing. 
+The function `removeElementsFromAdjacency` is used to remove a pair from the adjacency list and add its updated version. 
+The entry of the `marked`  vector of vectors of bolean associated with the removed pair is also removed.  
 
+It takes six parameters:  
+1. `myGraph` This parameter represents the graph structure to be modified. It is passed by reference to allow direct modification of the original graph.  
+2. pairList  This vector of vectors contains pairs of nodes representing the pairings that need to be considered for updating the adjacency list.  
+3. NewAdjacencyList This vector of vectors represents the updated adjacency list after the function execution. It is modified within the function.  
+4. allNodes  This vector contains all the nodes in the graph, typically used to iterate over each node and determine the pairings.  
+5. newNodeWeights This vector stores the weights of nodes in the graph after the adjacency list is updated.  
+6. sizeCounter  This integer reference tracks the size of the adjacency list after modifications.
+   
 ## `coarseGraph`
 
 The `coarseGraph` function performs graph coarsening by merging nodes based on certain criteria, updating the graph structure, and returning a coarser-level graph.
