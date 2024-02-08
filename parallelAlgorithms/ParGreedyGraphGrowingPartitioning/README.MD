@@ -150,6 +150,11 @@ This function implements "the Greedy Graph Growing Partitioning algorithm (GGGP)
 1. `g` The graph
 2. `np` The number of partitions
 
+### `Purpose`:
+The purpose of the `GGGP` function is to partition a given graph into subgraphs such that each subgraph satisfies a certain weight constraint. It uses a greedy algorithm to iteratively select vertices with the highest gain until the weight constraint is met, then recursively partitions the resulting subgraphs.
+
+### `Function Overview`:
+
 ## `isPowerOf2`
 
 This function has one input and gets the `np` as the number of partitions then checks whether it is a multiple of a power of 2 or not.
