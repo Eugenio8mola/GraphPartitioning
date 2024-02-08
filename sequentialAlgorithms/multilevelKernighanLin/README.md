@@ -85,9 +85,10 @@ Receives three parameters:
 
 ## `readAdjacencyList`
 
-This function receives two parameters and reads the graph from the file and puts it in a vector of vectors.
-1. `filename` is the name of the file
-2. `g` An object from the class of graph
+Reads the adjacency list from the specified input file and saves it in in a vector of vectors of the specified `Graph` object.  
+Receives two parameters:  
+the name of the file `filename`   
+the `Graph g` in which the adjacency list should be saved 
 
 ## `computePartitionWeights`
 
