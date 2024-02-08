@@ -147,7 +147,6 @@ This function receives three parameters and calculates the gain in each iteratio
 ## `GGGP`
 
 This function implements "the Greedy Graph Growing Partitioning algorithm (GGGP)".  
-`Purpose`:
 The `purpose` of the `GGGP` function is to partition a given graph into subgraphs such that each subgraph satisfies a certain weight constraint. It uses a greedy algorithm to iteratively select vertices with the highest gain until the weight constraint is met, then recursively partitions the resulting subgraphs.
 The function `initializes` a set `E` containing a single vertex with the maximum weight in the graph.
 It also initializes a set `F` containing adjacent vertices to the vertex `v0`.
