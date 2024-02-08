@@ -60,7 +60,7 @@ Creates an `empty` GraphHandler object.
 
 ## `GraphHandler(int n, int max_w)`
 
-Creates a `GraphHandler` object, a random graph with:  
+Creates a `GraphHandler` object, generates a random graph with:  
 number of nodes `n`    
 maximum node weight `max_w`.
 
