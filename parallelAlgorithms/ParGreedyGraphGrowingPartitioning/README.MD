@@ -146,31 +146,34 @@ This function receives three parameters and calculates the gain in each iteratio
 
 ## `GGGP`
 
-This function implements "the Greedy Graph Growing Partitioning algorithm (GGGP)". It receives two parameters:
-1. `g` The graph
-2. `np` The number of partitions
+This function implements "the Greedy Graph Growing Partitioning algorithm (GGGP)".  
+`Purpose`:
+The `purpose` of the `GGGP` function is to partition a given graph into subgraphs such that each subgraph satisfies a certain weight constraint. It uses a greedy algorithm to iteratively select vertices with the highest gain until the weight constraint is met, then recursively partitions the resulting subgraphs.
 
-### `Purpose`:
-The purpose of the `GGGP` function is to partition a given graph into subgraphs such that each subgraph satisfies a certain weight constraint. It uses a greedy algorithm to iteratively select vertices with the highest gain until the weight constraint is met, then recursively partitions the resulting subgraphs.
+`Function Overview`:
 
-### `Function Overview`:
+`step1`:
 
-### `step1`: Initialization:
-
-The function initializes a set `E` containing a single vertex with the maximum weight in the graph.
+The function `initializes` a set `E` containing a single vertex with the maximum weight in the graph.
 It also initializes a set `F` containing adjacent vertices to the vertex `v0`.
 For each vertex `v` in set `F`, it calculates the gain using the `calculate_gain` function and stores it in a `map gain`.
 
-### `step2`: Greedy Partitioning:
+`step2`: Greedy Partitioning:
 + It iteratively selects vertices with the highest gain from set `F` until the total weight of vertices in set `E` reaches half of the total weight of all vertices in the graph.  
 + The vertex with the highest gain is selected by iterating through set `F` and finding the vertex with the maximum gain. In the case of ties, the vertex with the minimum weight is chosen.
 + Selected vertices are moved from set `F` to set `E`, and their weights are added to the total weight of vertices in set `E`.
 + The adjacent vertices of the selected vertices that are not already in sets `E` or `F` are added to set `F`.
 
-### `step3`: Partitioning and Recursion:
+`step3`: Partitioning and Recursion:
 
 + After the greedy partitioning process, the function creates two partitions based on sets `E` and `F`.
 + It then recursively calls itself (GGGP) on each partition if the partition size is greater than or equal to 2 and np (partitioning depth) is greater than 1.
+
+`Parameters`:  
+1. `g` The graph
+2. `np` The number of partitions
+
+
 
 ## `isPowerOf2`
 
