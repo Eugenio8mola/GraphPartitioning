@@ -53,6 +53,39 @@ The `GraphHandler` class provides functionality for handling graphs, including g
 ## `GraphHandler`
 Creates an empty GraphHandler object.   
 
+## Second Constructor
+
+### `GraphHandler(int n, int max_w)`
+
+Creates a `GraphHandler` object, a random graph with:  
+number of nodes `n`    
+maximum node weight `max_w`.
+
+## Public Methods
+
+## `getGraph`  
+Returns the `Graph` stored in the GraphHandler object.
+
+## `printPairList`
+Prints the pair list used for uncoarsing the `Graph g`.
+
+## `print`
+
+Prints the adjacency list and node weights of the `Graph g`
+
+## `saveAdjacencyList`
+Writes the `Adjacency List`of the graph on the specified output file.  
+Receives three parameters:   
+1. `g` the graph  
+2. `n` number of nodes  
+3. `filename` is the name of the file  
+
+## `readAdjacencyList`
+
+This function receives two parameters and reads the graph from the file and puts it in a vector of vectors.
+1. `filename` is the name of the file
+2. `g` An object from the class of graph
+
 ## `computePartitionWeights`
 
 The `computePartitionWeights` function calculates the total weight of each partition based on the nodes' weights. 
