@@ -49,7 +49,7 @@ The `GraphHandler` class provides functionality for handling graphs, including g
 ## Constructors
 
 ### First Constructor
-```cpp
+
 ## `GraphHandler`
 Creates an empty GraphHandler object.   
 
