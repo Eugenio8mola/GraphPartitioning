@@ -93,6 +93,7 @@ Prints the adjacency list and node weights of the `Graph g`
 
 ## `saveAdjacencyList`
 Writes the `Adjacency List`of the graph on the specified output file.  
+
 Receives three parameters:   
 1. `g` the graph  
 2. `n` number of nodes  
@@ -101,6 +102,7 @@ Receives three parameters:
 ## `readAdjacencyList`
 
 Reads the adjacency list from the specified input file and saves it in in a vector of vectors of the specified `Graph` object.  
+
 Receives two parameters:  
 1. the name of the file `filename`   
 2. the `Graph g` in which the adjacency list should be saved 
@@ -109,7 +111,8 @@ Receives two parameters:
 
 ## `computePartitionWeights`
 
-The `computePartitionWeights` function calculates the total weight of each partition based on the nodes' weights.   
+The `computePartitionWeights` function calculates the total weight of each partition based on the nodes' weights. 
+
 It takes two parameters:  
 1. the vector of integers `partition` representing the partition number to which nodes belong to.  
 2. the vector of integers `nodeWeights` representing the weights of nodes.  
@@ -117,13 +120,15 @@ It takes two parameters:
 ## `computeCutCost`
 
 The `computeCutCost` function calculates the cut cost for a given partition in a graph, which represents the sum of weights of edges crossing the partition boundary.  
+
 It takes two parameters:  
 1. the Graph class `myGraph`  
 2. the partition vector `partition` specifying the current partition assigned to each node.  
 
 ## `kernighanLin`
 
-The `kernighanLin` function implements the Kernighan-Lin algorithm, which iteratively improves the quality of the partition by swapping pairs of nodes to reduce the cut cost.  
+The `kernighanLin` function implements the Kernighan-Lin algorithm, which iteratively improves the quality of the partition by swapping pairs of nodes to reduce the cut cost. 
+
 It takes two parameters:  
 1. the Graph class `myGraph`  
 2. the partition vector `partition` specifying the current partition assigned to each node.  
@@ -132,6 +137,7 @@ It takes two parameters:
 
 The `isPowerOf2` function checks if both the input integer `k` and the size of the graph in terms of number of nodes `n` are powers of 2.  
 It utilizes bitwise operations to determine whether a number is a power of 2.  
+
 It takes two parameters:   
 1. the number of partitions to apply `k`.  
 2. the Graph data structure `myGraph` used to obtain the size of the generated graph.
@@ -180,6 +186,7 @@ It takes six parameters:
 
 The `removeElementsFromAdjacency` function removes elements from the adjacency list.  
 The corresponding element is removed also from the `marked` matrix in the same position.  
+
 It takes four parameters:    
 1. the index `i` of the row in the adjacency list from which elements need to be removed.  
 2. the vector `keepPositionOfL` contains the shift to apply to the adacency list in order to compute the positions of elements that need to be removed.  
@@ -197,6 +204,7 @@ The function `removeElementsFromAdjacency` is called to remove a pair from the a
 The entry of the `marked` vector of vectors of bolean values associated with the removed pair is also removed due to the correspondence created between the two structures.   
 The node pairs removed are all specified in the `vector<vector<pair<int,int>>>` `pairList`.  
 Removed pairs are then replaced by the generated `supernode`.  
+
 The function takes six parameters:  
 1. the Graph class `myGraph`
 2. the vector of vectors `pairList` containing pairs of nodes representing the pairings that need to be considered for updating the adjacency list.  
@@ -225,7 +233,8 @@ Returns:
 The `uncoarseGraph` function reconstructs partitioning information for a graph that has been coarsed, computes the total  
 weight of a partition and calculates the cut cost for the reconstructed partition.   
 The reconstruction is performed by exploiting the pairs contained in `pairList` and assigning to the pairs the same  
-partition of the `supernodes` originated by their merging.  
+partition of the `supernodes` originated by their merging. 
+
 It receives four parameters:  
 1. the recursively uncoarsed graph `copyGraph`  
 2. the coarsed graph `multilevelGraph`    
@@ -243,7 +252,8 @@ Receives as parameter the vector `partition`.
 ## `multilevelKL`
 
 The `multilevelKL` function acts as a `wrapper` implementing a multilevel graph partitioning algorithm based on the Kernighan-Lin heuristic.  
-It recursively coarsens the graph, uncoarsens the graph and applies KL partitioning at each level.
+It recursively coarsens the graph, uncoarsens the graph and applies KL partitioning at each level.  
+
 It receives four paramters:  
 1. the input graph to be partitioned `multilevelGraph`.  
 2. the vector `partition` storing the initial partition assignments for each node.
