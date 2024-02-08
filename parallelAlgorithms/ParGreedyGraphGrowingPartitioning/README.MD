@@ -139,10 +139,19 @@ After splitting the graph in each iteration we call this function and pass the p
 
 ## `calculate_gain`
 
-This function receives three parameters and calculates the gain in each iteration to select the maximum gain node.
-1. `graph` The graph
-2. `vertex` A specific node
-3. `E` is a set of nodes that are adjacent to that specific node.
+The `purpose` of the `calculate_gain` function is to determine the gain of a vertex when considering its adjacency to vertices in a specified set.  
+This function receives three parameters and calculates the gain in each iteration to select the maximum gain node:  
+1. `graph` is a reference to the graph object for which gain calculation is performed.  
+2. `vertex` is the vertex for which gain is calculated.  
+3. `E` is a set of nodes that are adjacent to that specific vertex.  
+
+The function iterates through the adjacent vertices of the given vertex.  
+For each adjacent vertex:  
+If the adjacent `vertex` belongs to set `E`, the weight of the edge between the given `vertex` and the adjacent `vertex` is added to the gain.  
+If the adjacent `vertex` does not belong to set `E`, the weight of the edge between the given `vertex` and the adjacent `vertex` is subtracted from the gain.  
+The resulting gain value reflects the net effect of adjacent vertices on the partitioning decision regarding the given `vertex`.  
+Return Value:  
++ The function returns the computed gain value for the specified `vertex`.
 
 ## `GGGP`
 
