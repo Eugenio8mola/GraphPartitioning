@@ -54,7 +54,7 @@ The `GraphHandler` class provides functionality for handling graphs, including g
 ### First Constructor
 
 ## `GraphHandler`
-Creates an empty GraphHandler object.   
+Creates an `empty` GraphHandler object.   
 
 ### Second Constructor
 
