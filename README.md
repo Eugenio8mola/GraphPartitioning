@@ -21,14 +21,14 @@ The programs in this repository can be run on Linux, Windows, and macOS. Ensure 
 
 ## Algorithms Implemented
 
-### Fiduccia-Mattheyses
+### `Fiduccia-Mattheyses`
 This algorithm is based on a local search approach and aims to balance the sizes of partitions while minimizing the edge cut.
 
-### Multilevel Kernighan-Lin
+### `Multilevel Kernighan-Lin`
 The multilevel version of the Kernighan-Lin algorithm improves the partitioning quality by constructing a hierarchy of coarser graphs.
 When the coarsest graph is reached,  it applies the partition and refines the edge cut at multiple levels by applying Kernighan-Lin and uncoarsening the graph till the original input graph is obtained.
 
-### Greedy Graph Growing Partitioning
+### `Greedy Graph Growing Partitioning`
 This algorithm iteratively grows a partition by greedily selecting nodes based on certain criteria, aiming to achieve a balanced partitioning with minimal communication overhead.
 
 ### Parallel Versions
