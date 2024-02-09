@@ -66,7 +66,7 @@ To use the programs in this repository, follow these steps:
 2. Navigate to the project directory:
 
    ```bash
-   cd GraphPartitioning/sequentialAlgorithms/multilevelKernighanLin
+   cd GraphPartitioning/parallelAlgorithms/ParMultilevelKernighanLin
 
    ```
 
@@ -75,13 +75,13 @@ To use the programs in this repository, follow these steps:
 1. Compile the program using your preferred C++ compiler:
 
    ```bash
-   g++ -o multilevelKL main.cpp
+   g++ -o ParMultilevelKL main.cpp
    ```
 
 2. Run the program:
 
    ```bash
-   ./multilevelKL num_nodes max_node_weight num_partitions
+   ./ParMultilevelKL num_nodes max_node_weight num_partitions
    ```
 
    Replace:  
