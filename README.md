@@ -1,7 +1,7 @@
 # Graph Partitioning
 
 This project provides implementations of various graph partitioning algorithms in `C++` for efficient partitioning of large graphs.  
-The implemented algorithms include:  
+The implemented algorithms are:  
 + `Fiduccia-Mattheyses`,  
 + `multilevel Kernighan-Lin`,  
 + `Greedy Graph Growing Partitioning`,
