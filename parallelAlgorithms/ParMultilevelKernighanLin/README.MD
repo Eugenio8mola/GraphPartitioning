@@ -44,10 +44,6 @@ The join() method is called on each thread object (Th1.join() and Th2.join()), w
 
 ## Supported Platforms
 
-The programs in this repository can be run on Linux, Windows, and macOS. Ensure you have a C++ compiler installed on your system. If you're using Windows, consider using MinGW or Visual Studio. On macOS and Linux, the default system compiler should suffice.
-
-## Supported Platforms
-
 The programs in this repository can be run on Linux, Windows, and macOS. Ensure you have a C++ compiler installed on your system.   
 If you're using Windows, consider using MinGW or Visual Studio. On macOS and Linux, the default system compiler should suffice.
 
