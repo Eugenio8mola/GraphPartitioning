@@ -18,7 +18,7 @@ This refinement can involve local optimization techniques, such as the `Kernigha
 The application of the Kernighan-Lin algorithm involves iteratively moving vertices between the partitions to improve a predefined objective, such as minimizing edge cuts.   
 By employing coarsening and uncoarsening strategies, the multilevel Kernighan-Lin algorithm effectively balances the trade-off between partition quality and computational efficiency, making it suitable for partitioning large graphs efficiently while maintaining partition quality and preserving the original graph structure.  
 
-### Multithreading Section
+## Multithreading Section
 
 The multithreading approach aims to improve performance by utilizing multiple CPU cores for parallel computation, thereby potentially reducing the overall execution time. We initialize two threads (Th1 and Th2) to concurrently execute the GGGP function on two subgraphs (g1 and g2):
 
