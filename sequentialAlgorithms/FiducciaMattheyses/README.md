@@ -130,6 +130,13 @@ After splitting the graph in each iteration we call this function and pass the p
 
 ## `calculateIED`
 
+The calculateIED function computes the Internal Edge Density (IED) and External Edge Density (EED) for each vertex in two partitions of a graph. Internal Edge Density represents the sum of edge weights between vertices within the same partition, while External Edge Density represents the sum of edge weights between vertices in different partitions. Parameters:  
+graph &g: Reference to the graph object on which calculations are performed.  
+vector<int> p1: Vector representing the vertices in the first partition.  
+vector<int> p2: Vector representing the vertices in the second partition.  
+unordered_map<int, int> &Internal: Reference to an unordered map where the Internal Edge Density values for each vertex will be stored.  
+unordered_map<int, int> &External: Reference to an unordered map where the External Edge Density values for each vertex will be stored.  
+unordered_map<int, int> &D: Reference to an unordered map where the Density difference values (EED - IED) for each vertex will be stored.  
 
 
 ## `calculate_gain`
