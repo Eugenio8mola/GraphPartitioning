@@ -46,12 +46,12 @@ To use the programs in this repository, follow these steps:
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/Eugenio8mola/GraphPartitioning/sequentialAlgorithms/GreedyGraphGrowingPartitioning.git
+   git clone https://github.com/Eugenio8mola/GraphPartitioning/sequentialAlgorithms/FiducciaMattheyses.git
 
 2. Navigate to the project directory:
 
    ```bash
-   cd GraphPartitioning/sequentialAlgorithms/GreedyGraphGrowingPartitioning
+   cd GraphPartitioning/sequentialAlgorithms/FiducciaMattheyses
    ```
 
 ### Compiling and Running
@@ -59,13 +59,13 @@ To use the programs in this repository, follow these steps:
 1. Compile the program using your preferred C++ compiler:
 
    ```bash
-   g++ -o gggp main.cpp
+   g++ -o fidmat main.cpp
    ```
 
 2. Run the program:
 
    ```bash
-   ./gggp numberOfNode maxWeight number_partitions
+   ./fidmat numberOfNode maxWeight number_partitions
    ```
 
    Replace `numberOfNode` with the desired number of nodes that should be used for graph generation, `maxWeight` with the maximum node weight that should be used for graph generation, and `number_partitions` with the desired number of partitions that should be applied.
