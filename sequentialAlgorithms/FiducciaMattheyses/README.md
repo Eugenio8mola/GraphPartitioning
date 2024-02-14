@@ -1,5 +1,5 @@
 
-## Greedy Graph Growing Partitioning Algorithm  
+## Fiduccia-Mattheyses Algorithm for Graph Partitioning  
 
 <p align="justify">
   The Fiduccia-Mattheyses algorithm is a well-known iterative bi-partitioning algorithm used for graph partitioning. It aims to partition a given graph into two subgraphs while minimizing the edge-cut, which represents the number of edges crossing the partition boundary.
