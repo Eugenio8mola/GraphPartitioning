@@ -141,9 +141,12 @@ The calculateIED function computes the Internal Edge Density (IED) and External 
 2. For each adjacent vertex, check if it belongs to partition 1 or partition 2:  
       If it belongs to partition 1, increment the Internal Edge Density (i) by the edge weight.  
       If it belongs to partition 2, increment the External Edge Density (e) by the edge weight.  
-3. Store the `Internal` (i) and `External` (e) Edge Density values for the vertex in the respective unordered maps.  
+3. Store the `Internal` (i) and `External` (e) Edge Density values for the vertex in the respective unordered maps.
+
 Repeat steps 1-3 for vertices in partition 2 (`p2`).  
+
 Calculate the Density difference (EED - IED) for each vertex and store it in the unordered map `D`.  
+
 
 
 ## `calculate_gain`
