@@ -168,26 +168,28 @@ Store the gain value for each pair of vertices in the unordered map `gain`.
 The `calculateCutSize` function computes the cut size of a partition in a graph. The cut size represents the total weight of edges that connect vertices in the partition to vertices outside the partition. Parameters:  
 `p1`: Vector representing the vertices in the partition for which the cut size is calculated.  
 `External`: Reference to an unordered map containing the External Edge Density values for each vertex. This map represents the sum of edge weights between vertices in the partition and vertices outside the partition.  
+
 Return Value:  
 +  `t`: Integer representing the cut size of the partition.
 
 
-## `GGGP`
+## `fiducciaMattheyses`
 
-This function implements "the Greedy Graph Growing Partitioning algorithm (GGGP)". The `purpose` of the `GGGP` function is to partition a given graph into subgraphs such that each subgraph satisfies a certain weight constraint. It uses a greedy algorithm to iteratively select vertices with the highest gain until the weight constraint is met, then recursively partitions the resulting subgraphs.  
-The function `initializes` a set `E` containing a single vertex with the maximum weight in the graph.  
-It also initializes a set `F` containing adjacent vertices to the vertex `v0`.  
-For each vertex `v` in set `F`, it calculates the gain using the `calculate_gain` function and stores it in a `map gain`.  
-It iteratively selects vertices with the highest gain from set `F` until the total weight of vertices in set `E` reaches half of the total weight of all vertices in the graph.  
-The vertex with the highest gain is selected by iterating through set `F` and finding the vertex with the maximum gain. In the case of ties, the vertex with the minimum weight is chosen.  
-Selected vertices are moved from set `F` to set `E`, and their weights are added to the total weight of vertices in set `E`.  
-The adjacent vertices of the selected vertices that are not already in sets `E` or `F` are added to set `F`.  
-After the greedy partitioning process, the function creates two partitions based on sets `E` and `F`.  
-It then recursively calls itself (GGGP) on each partition if the partition size is greater than or equal to 2 and np (partitioning depth) is greater than 1.  
+The fiducciaMattheyses function implements the Fiduccia-Mattheyses algorithm for graph partitioning. This algorithm recursively divides a graph into smaller subgraphs by iteratively moving vertices between partitions to minimize the cut size. The cut size represents the total weight of edges that connect vertices in different partitions. Parameters:  
+`g`: Reference to the graph object on which partitioning is performed.  
+`np`: Integer representing the desired number of partitions.  
+Initialize partitions by evenly distributing vertices into two partitions.  
+Calculate the Internal and External Edge Densities for each vertex in the partitions.  
+Calculate the initial cut size of the partitions.  
+Repeat until no further improvement can be made:  
+  a. Calculate the gain for moving each pair of vertices between partitions.  
+  b. Identify the pair of vertices with the maximum gain.  
+  c. Move the identified pair of vertices between partitions, ensuring that the maximum weight constraints are met.  
+  d. Recalculate the Internal and External Edge Densities and the cut size of the partitions.  
+  e. If the cut size decreases, update the partitions.  
+  
+Recursively apply the Fiduccia-Mattheyses algorithm to each subgraph until the desired number of partitions is reached.  
 
-It receives two parameters:   
-1. `g` the input graph    
-2. `np` is the number of partitions to perform
    
 ## `isPowerOf2`
 
