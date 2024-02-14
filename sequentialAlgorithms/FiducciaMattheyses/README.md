@@ -130,7 +130,7 @@ After splitting the graph in each iteration we call this function and pass the p
 
 ## `calculateIED`
 
-The calculateIED function computes the Internal Edge Density (IED) and External Edge Density (EED) for each vertex in two partitions of a graph. Internal Edge Density represents the sum of edge weights between vertices within the same partition, while External Edge Density represents the sum of edge weights between vertices in different partitions. Parameters:  
+The `calculateIED` function computes the Internal Edge Density (IED) and External Edge Density (EED) for each vertex in two partitions of a graph. Internal Edge Density represents the sum of edge weights between vertices within the same partition, while External Edge Density represents the sum of edge weights between vertices in different partitions. Parameters:  
 `g`: Reference to the graph object on which calculations are performed.  
 `p1`: Vector representing the vertices in the first partition.  
 `p2`: Vector representing the vertices in the second partition.  
@@ -149,21 +149,14 @@ Calculate the Density difference (EED - IED) for each vertex and store it in the
 
 
 
-## `calculate_gain`
+## `calculateGain`
 
-The `purpose` of the `calculate_gain` function is to determine the gain of a vertex when considering its adjacency to vertices in a specified set.  
-This function receives three parameters and calculates the gain in each iteration to select the maximum gain node:  
-1. `graph` is a reference to the graph object for which gain calculation is performed.  
-2. `vertex` is the vertex for which gain is calculated.  
-3. `E` is a set of nodes that are adjacent to that specific vertex.  
-
-The function iterates through the adjacent vertices of the given vertex.  
-For each adjacent vertex:  
-If the adjacent `vertex` belongs to set `E`, the weight of the edge between the given `vertex` and the adjacent `vertex` is added to the gain.  
-If the adjacent `vertex` does not belong to set `E`, the weight of the edge between the given `vertex` and the adjacent `vertex` is subtracted from the gain.  
-The resulting gain value reflects the net effect of adjacent vertices on the partitioning decision regarding the given `vertex`.  
-Return Value:  
-+ `gain` is the value of the computed gain for the specified vertex.
+The `calculateGain` function computes the gain for each possible movement of vertices between two partitions in a graph. The gain represents the change in the density difference (EED - IED) if a vertex is moved from one partition to another. This gain is calculated by considering the change in density difference for all possible vertex movements between the two partitions. Parameters:  
+`g`: Reference to the graph object on which calculations are performed.
+`p1`: Vector representing the vertices in the first partition.
+`p2`: Vector representing the vertices in the second partition.
+`D`: Reference to an unordered map containing the density difference values (EED - IED) for each vertex.
+`gain`: Reference to an unordered map where the gain for each possible movement of vertices between partitions will be stored. The key is a pair of vertices (one from each partition), and the value is the gain associated with moving these vertices.
 
 ## `GGGP`
 
