@@ -78,7 +78,7 @@ To use the programs in this repository, follow these steps:
 2. Navigate to the project directory:
 
    ```bash
-   cd GraphPartitioning/sequentialAlgorithms/FiducciaMattheyses
+   cd GraphPartitioning/parallelAlgorithms/ParFiducciaMattheyses
    ```
 
 ### Compiling and Running
@@ -86,13 +86,13 @@ To use the programs in this repository, follow these steps:
 1. Compile the program using your preferred C++ compiler:
 
    ```bash
-   g++ -o fidmat main.cpp
+   g++ -o parfidmat main.cpp
    ```
 
 2. Run the program:
 
    ```bash
-   ./fidmat numberOfNode maxWeight number_partitions
+   ./parfidmat numberOfNode maxWeight number_partitions
    ```
 
    Replace `numberOfNode` with the desired number of nodes that should be used for graph generation, `maxWeight` with the maximum node weight that should be used for graph generation, and `number_partitions` with the desired number of partitions that should be applied.
