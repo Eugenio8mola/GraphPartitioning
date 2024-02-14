@@ -98,24 +98,21 @@ This function receives two parameters and reads the graph from the file and puts
 This function receives the number of one node and then returns the weight of the node.
 `vertex` is the number of one node
 
-## `total_vertex_weight`
+## `getAllWeigt`
 
-This function returns the summation of the weights of all nodes.
+This function returns the vector of the weights.
 
-## `max_vertex_weight`
+## `numNode`
 
-This function returns the maximum weight of all nodes by searching through the 'w_node'.
-'w_node' is a private variable of the class of the graph.
+This function returns the number of nodes.
 
-## `get_edge_weight`
+## `get_weight_partition`
 
-This function receives a pair `edge` including two nodes and then returns the weight of edges:
-if there exists an edge it returns the weight of the edge, otherwise it returns 0.
+This function receives a partition and then returns the summation of all node weights.
 
-## `get_adjacent_vertices`
+## `get_max_weight`
 
-This function receives the number of a node and then returns all nodes that are adjacent to it.
-The output of the function is a `set<int>`.
+This function returns the maximum weight in the vector of weights.
 
 ## `make_new_graph`
 
