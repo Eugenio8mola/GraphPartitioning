@@ -114,9 +114,23 @@ This function receives a partition and then returns the summation of all node we
 
 This function returns the maximum weight in the vector of weights.
 
+## `get_edge_weight`
+
+This function receives a pair `edge` including two nodes and then returns the weight of edges:
+if there exists an edge it returns the weight of the edge, otherwise it returns 0.
+
+## `get_adjacent_vertices`
+
+This function receives the number of a node and then returns all nodes that are adjacent to it.
+The output of the function is a `set<int>`.
+
 ## `make_new_graph`
 
 After splitting the graph in each iteration we call this function and pass the partitions `vec` to this function to generate two new graphs.
+
+## `calculateIED`
+
+
 
 ## `calculate_gain`
 
@@ -132,7 +146,7 @@ If the adjacent `vertex` belongs to set `E`, the weight of the edge between the 
 If the adjacent `vertex` does not belong to set `E`, the weight of the edge between the given `vertex` and the adjacent `vertex` is subtracted from the gain.  
 The resulting gain value reflects the net effect of adjacent vertices on the partitioning decision regarding the given `vertex`.  
 Return Value:  
-+ `gain` the value of the computed gain for the specified vertex.
++ `gain` is the value of the computed gain for the specified vertex.
 
 ## `GGGP`
 
