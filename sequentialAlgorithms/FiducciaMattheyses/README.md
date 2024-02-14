@@ -152,11 +152,25 @@ Calculate the Density difference (EED - IED) for each vertex and store it in the
 ## `calculateGain`
 
 The `calculateGain` function computes the gain for each possible movement of vertices between two partitions in a graph. The gain represents the change in the density difference (EED - IED) if a vertex is moved from one partition to another. This gain is calculated by considering the change in density difference for all possible vertex movements between the two partitions. Parameters:  
-`g`: Reference to the graph object on which calculations are performed.
-`p1`: Vector representing the vertices in the first partition.
-`p2`: Vector representing the vertices in the second partition.
-`D`: Reference to an unordered map containing the density difference values (EED - IED) for each vertex.
-`gain`: Reference to an unordered map where the gain for each possible movement of vertices between partitions will be stored. The key is a pair of vertices (one from each partition), and the value is the gain associated with moving these vertices.
+`g`: Reference to the graph object on which calculations are performed.  
+`p1`: Vector representing the vertices in the first partition.  
+`p2`: Vector representing the vertices in the second partition.  
+`D`: Reference to an unordered map containing the density difference values (EED - IED) for each vertex.  
+`gain`: Reference to an unordered map where the gain for each possible movement of vertices between partitions will be stored. The key is a pair of vertices (one from each partition), and the value is the gain associated with moving these vertices.  
+Iterate through each vertex in partition 1 (`p1`).  
+For each vertex in partition 1, iterate through each vertex in partition 2 (`p2`).  
+Calculate the gain for moving the current pair of vertices from different partitions.  
+`Gain` is computed as the sum of the density differences of the vertices in their current partitions minus twice the edge weight between them.  
+Store the gain value for each pair of vertices in the unordered map `gain`.  
+
+## `calculateCutSize`
+
+The `calculateCutSize` function computes the cut size of a partition in a graph. The cut size represents the total weight of edges that connect vertices in the partition to vertices outside the partition. Parameters:  
+`p1`: Vector representing the vertices in the partition for which the cut size is calculated.  
+`External`: Reference to an unordered map containing the External Edge Density values for each vertex. This map represents the sum of edge weights between vertices in the partition and vertices outside the partition.  
+Return Value:  
++  `t`: Integer representing the cut size of the partition.
+
 
 ## `GGGP`
 
