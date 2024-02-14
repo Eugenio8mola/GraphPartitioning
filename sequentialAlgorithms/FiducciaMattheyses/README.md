@@ -4,7 +4,14 @@
 <p align="justify">
   The Fiduccia-Mattheyses algorithm is a well-known iterative bi-partitioning algorithm used for graph partitioning. It aims to partition a given graph into two subgraphs while minimizing the edge-cut, which represents the number of edges crossing the partition boundary.
 </p>
-<p align="justify"></p>
+<p align="justify">
+Begin with an initial partition of the graph vertices into two sets, often randomly or based on some heuristic.  
+Iterate through the vertices and consider moving each vertex from its current partition to the other partition if it improves the overall edge-cut.  
+Compute the gain in edge-cut for moving each vertex and select the vertex that maximizes this gain.  
+Move the selected vertex to the other partition if the gain is positive (or zero if tie-breaking rules apply).  
+Repeat this process until no further improvements can be made or a termination condition is met.  
+Terminate the algorithm when no further improvement is possible, typically after a predefined number of iterations or when a certain threshold for improvement is reached.  
+</p>
 <p align="justify"></p>
 
 
