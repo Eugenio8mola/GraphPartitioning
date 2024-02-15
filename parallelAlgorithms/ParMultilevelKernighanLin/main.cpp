@@ -528,14 +528,6 @@ cout <<"Problem line 522"<< endl;
         //myLck.release();
     }
 
-    cout << "Adjacency List is:" << endl;
-    for (const auto &vector: NewAdjacencyList) {
-        for (const auto &pair: vector) {
-            cout << "(" << pair.first << ", " << pair.second << ") ";
-        }
-        cout << "" << endl;
-    }
-
     lck.lock();
     //UPDATE new adj list
     vector<vector<bool>> marked(NewAdjacencyList.size());
@@ -543,15 +535,6 @@ cout <<"Problem line 522"<< endl;
         marked[i].resize(NewAdjacencyList[i].size(), false);
     }
     lck.unlock();
-
-    //PRINT MARKED
-    for (size_t i = 0; i < marked.size(); ++i) {
-        std::cout << "Row " << i << ": ";
-        for (size_t j = 0; j < marked[i].size(); ++j) {
-            std::cout << marked[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
 
     lck.lock();
     bool update = false;
@@ -586,29 +569,6 @@ cout <<"Problem line 522"<< endl;
                     update = false;
                     keepPositionOfL.clear();
 
-                    //PRINT LISTS and print updated boolean matrix
-//                        static int myVal = 1;
-//                        cout << "-----------------------------------------------------" << endl;
-//                        cout << "Pass: " << myVal  << endl;
-//                        myVal++;
-//                        cout << "Adjacency List is:" << endl;
-//                        for (const auto &vector: NewAdjacencyList) {
-//                            for (const auto &pair: vector) {
-//                                cout << "(" << pair.first << ", " << pair.second << ") ";
-//                            }
-//                            cout << "" << endl;
-//                        }
-//
-//                        for (size_t i = 0; i < marked.size(); ++i) {
-//                            std::cout << "Row " << i << ": ";
-//                            for (size_t j = 0; j < marked[i].size(); ++j) {
-//                                std::cout << marked[i][j] << " ";
-//                            }
-//                            std::cout << std::endl;
-//                        }
-                    //cout << "-----------------------------------------------------" << endl;
-                    // //////////////////////////////////////////////////////
-
                 }
 
             }
@@ -631,6 +591,8 @@ cout <<"Problem line 522"<< endl;
         cout << " " << endl;
     }
 
+    myGraph.pairList = pairList;
+    GraphHandler::printPairList(myGraph);
     cout << "\n" << endl;
 
     for (size_t i = 0; i < marked.size(); ++i) {
@@ -646,7 +608,7 @@ cout << "END reached"<< endl;
 void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, int avgNodeWeight, vector<int> maxInterval,vector<int> minInterval, vector<bool> locked,vector<int>& allNodes, vector<int>& newNodeWeights, int sizeCounter, vector<vector<pair<int,int>>> NewAdjacencyList,vector<vector<pair<int,int>>> pairList,  int thread_id, int num_threads) {
 
 
-    unique_lock<mutex>lck{mtx};
+
 
     int num_nodes = myGraph.graph.size();
         for (int group = 0; group < num_nodes; group++) {
@@ -675,6 +637,7 @@ void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, in
                 totEdgeWeight += weight;
                 count_node++;
 
+                unique_lock<mutex>lck{mtx};
 
                 auto it = std::find(maxInterval.begin(), maxInterval.end(), nodeWeight);
                 if (it != maxInterval.end()) {
@@ -759,16 +722,17 @@ Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize, int
     for (int i = 0; i < num_threads; i++) {
         threads.emplace_back(coarsenNodes, std::ref(myGraph), std::ref(partition), std::ref(partitionSize), std::ref(avgNodeWeight),  std::ref(maxInterval),std::ref(minInterval), std::ref(locked),std::ref(allNodes), std::ref(newNodeWeights), std::ref(sizeCounter), std::ref(NewAdjacencyList),std::ref(pairList), i, num_threads);
     }
-
+    cout <<"Returned--RET threads??"<< endl;
     for (auto& thread : threads) {
         thread.join();
     }
 
 
 
+    cout <<"va anche qui?"<< endl;
     partitionSize = newNodeWeights.size();
     copyGraph.pairList = pairList;
-
+/*
     GraphHandler::print(copyGraph);
 
     GraphHandler::printPairList(copyGraph);
@@ -778,7 +742,7 @@ Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize, int
     GraphHandler::print(myGraph);
 
     GraphHandler::printPairList(myGraph);
-
+*/
 
     return copyGraph;
 }
@@ -890,7 +854,7 @@ int main() {
         int num_threads = std::stoi(argv[1]);
          */
 
-    int num_threads = 4;
+    int num_threads = 2;
     auto start_time = chrono::high_resolution_clock::now();
     vector<int> partition(n, -1);
     //generate Graph
