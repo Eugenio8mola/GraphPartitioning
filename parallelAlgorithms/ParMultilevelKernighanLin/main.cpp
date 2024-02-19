@@ -12,16 +12,18 @@
 #include <chrono>
 #include <thread>
 #include <future>
+#include <unistd.h>
 
 using namespace std;
 
 int k = 2;
 int n = 16;
 int maxWeight = 6;
+sem_t s;
 
 atomic<int> totalCutCost(0);
 vector<int> Gain;
-mutex mtx,lck,glock;
+mutex mtx,lck,glock,cmtx,umtx, emtx, adjmtx, fewestmtx, bestmtx;
 
 class Graph {
 
@@ -364,6 +366,7 @@ void isContiguous(const Graph& graph) {
 }
 
 int findNodeWithFewestAdjacents(const std::vector<std::vector<pair<int,int>>>& adjacencyList, vector<bool>& locked) {
+
     if (adjacencyList.empty()) {
         // Handle the case where the adjacency list is empty
         cout << "List is empty" << endl;
@@ -390,9 +393,11 @@ int findNodeWithFewestAdjacents(const std::vector<std::vector<pair<int,int>>>& a
     }
 
     return nodeWithFewestAdjacents;
+
 }
 
 pair<int,int> returnBestNode(const Graph& myGraph, int nodeWithFewestAdjacents, int treshold, vector<int> maxInt,vector<int> minInt, vector<bool> locked) {
+
 
     int nearTreshold = std::numeric_limits<int>::max();
     int bestNode = -1;
@@ -605,16 +610,21 @@ cout <<"Problem line 522"<< endl;
 cout << "END reached"<< endl;
 }
 
-void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, int avgNodeWeight, vector<int> maxInterval,vector<int> minInterval, vector<bool> locked,vector<int>& allNodes, vector<int>& newNodeWeights, int sizeCounter, vector<vector<pair<int,int>>> NewAdjacencyList,vector<vector<pair<int,int>>> pairList,  int thread_id, int num_threads) {
+void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, int avgNodeWeight, vector<int> maxInterval,vector<int> minInterval, vector<bool>&locked,vector<int>& allNodes, vector<int>& newNodeWeights, int sizeCounter, vector<vector<pair<int,int>>> NewAdjacencyList,vector<vector<pair<int,int>>> pairList,  int thread_id, int num_threads) {
 
 
 
 
-    int num_nodes = myGraph.graph.size();
-        for (int group = 0; group < num_nodes; group++) {
+    //n_th = 4;
+    //n = 16 -> 8  0 -> 2 1
+    sem_wait(&s);
+    int num_nodesHalved = myGraph.graph.size();
+    int counter = thread_id*(num_nodesHalved/num_threads);
+        while(counter < (num_nodesHalved/num_threads + thread_id*(num_nodesHalved/num_threads))) {
             int nodeWithFewestAdjacents = findNodeWithFewestAdjacents(myGraph.graph, locked);
+            //cout << "Node With Fewest : " << nodeWithFewestAdjacents << endl;
             if (nodeWithFewestAdjacents == -1)
-                continue;
+                break;
 
             int weight;
             int nodeWeight = myGraph.nodeWeights[nodeWithFewestAdjacents];
@@ -625,7 +635,6 @@ void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, in
             if (locked[nodeWithFewestAdjacents] == false) {
                 indexes.emplace_back(nodeWithFewestAdjacents);
                 allNodes.emplace_back(nodeWithFewestAdjacents);
-
                 //select the node in the adjacency list whose summed weight is closest to the AVG node weight for the merging
                 pair<int, int> p = returnBestNode(myGraph, nodeWithFewestAdjacents, avgNodeWeight, maxInterval,
                                                   minInterval, locked); // index shift in vector
@@ -637,7 +646,7 @@ void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, in
                 totEdgeWeight += weight;
                 count_node++;
 
-                unique_lock<mutex>lck{mtx};
+
 
                 auto it = std::find(maxInterval.begin(), maxInterval.end(), nodeWeight);
                 if (it != maxInterval.end()) {
@@ -679,11 +688,15 @@ void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, in
 
             }
             partitionSize--;
+            counter++;
         }
+    cout << "allNodes Are: ";
+    for (int index = 0; index < allNodes.size() ; index++) {
 
-
-    updateAdjacencyList(myGraph, pairList, NewAdjacencyList, allNodes, newNodeWeights, sizeCounter);
-
+        cout << allNodes[index] << " ";
+    }
+    cout << ""<< endl;
+    sem_post(&s);
 }
 
 Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize, int num_threads) {
@@ -710,6 +723,7 @@ Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize, int
     int totNodeWeight = std::accumulate(myGraph.nodeWeights.begin(), myGraph.nodeWeights.end(), 0);
     int avgNodeWeight = ceil((2.0*totNodeWeight/myGraph.graph.size())); // 8
 
+    emtx.lock();
     for(int i = avgNodeWeight; i <= (2*maxNode); i++) {
         maxInterval.emplace_back(i); // 8 9 10
     }
@@ -717,17 +731,18 @@ Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize, int
     for(int i = (avgNodeWeight - 2*minNode - 1); i < (avgNodeWeight); i++) {
         minInterval.emplace_back(i); //5 6 7
     }
+    emtx.unlock();
 
     std::vector<std::thread> threads;
     for (int i = 0; i < num_threads; i++) {
         threads.emplace_back(coarsenNodes, std::ref(myGraph), std::ref(partition), std::ref(partitionSize), std::ref(avgNodeWeight),  std::ref(maxInterval),std::ref(minInterval), std::ref(locked),std::ref(allNodes), std::ref(newNodeWeights), std::ref(sizeCounter), std::ref(NewAdjacencyList),std::ref(pairList), i, num_threads);
     }
-    cout <<"Returned--RET threads??"<< endl;
+
     for (auto& thread : threads) {
         thread.join();
     }
 
-
+    updateAdjacencyList(myGraph, pairList, NewAdjacencyList, allNodes, newNodeWeights, sizeCounter);
 
     cout <<"va anche qui?"<< endl;
     partitionSize = newNodeWeights.size();
@@ -750,9 +765,9 @@ Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize, int
 void uncoarseGraph(Graph copyGraph, Graph multilevelGraph, vector<int>& partition, int &partitionSize, int n)
 {
 
-    //GraphHandler::print(copyGraph);
+    GraphHandler::print(copyGraph);
 
-    //GraphHandler::printPairList(copyGraph);
+    GraphHandler::printPairList(copyGraph);
 
     int size = copyGraph.graph.size();
     vector<int> newPartition(size);
@@ -811,7 +826,9 @@ void multilevelKL(Graph &multilevelGraph, vector<int>& partition, int &partition
         auto coarse_start_time = chrono::high_resolution_clock::now();
         cout <<"*---------------------------------------------------------------------------------------------------------------------------------------------------------*" << endl;
         cout << "running coarseGraph() pass = " << fold << endl;
+        cmtx.lock();
         Graph copyGraph = coarseGraph(multilevelGraph, partition, partitionSize,num_threads);
+        cmtx.unlock();
         auto coarse_end_time = chrono::high_resolution_clock::now();
         auto coarse_duration = chrono::duration_cast<chrono::microseconds>(coarse_end_time - coarse_start_time);
         effective_time = chrono::duration_cast<chrono::microseconds>( effective_time + coarse_duration);
@@ -823,7 +840,9 @@ void multilevelKL(Graph &multilevelGraph, vector<int>& partition, int &partition
         cout << "running uncoarseGraph() pass = " << unfold<< endl;
         unfold++;
         auto uncoarse_start_time = chrono::high_resolution_clock::now();
+        umtx.lock();
         uncoarseGraph(copyGraph, multilevelGraph, partition, partitionSize, n);
+        umtx.unlock();
         auto uncoarse_end_time = chrono::high_resolution_clock::now();
         auto uncoarse_duration = chrono::duration_cast<chrono::microseconds>(uncoarse_end_time - uncoarse_start_time);
         un_effective_time = chrono::duration_cast<chrono::microseconds>( un_effective_time + uncoarse_duration);
@@ -854,17 +873,19 @@ int main() {
         int num_threads = std::stoi(argv[1]);
          */
 
-    int num_threads = 2;
+
+    int num_threads = 4;
+    sem_init(&s, 0, num_threads);
     auto start_time = chrono::high_resolution_clock::now();
     vector<int> partition(n, -1);
     //generate Graph
     auto generation_start_time = chrono::high_resolution_clock::now();
-    GraphHandler myGraphHandler(n, maxWeight);
+    //GraphHandler myGraphHandler(n, maxWeight);
     auto generation_end_time = chrono::high_resolution_clock::now();
     auto gen_duration = chrono::duration_cast<chrono::microseconds>(generation_end_time - generation_start_time);
     cout << "Generation Time: " << gen_duration.count() << " microseconds" << endl;
     // Save the graph
-    GraphHandler::saveAdjacencyList(myGraphHandler.getGraph(), "graph.txt");
+    //GraphHandler::saveAdjacencyList(myGraphHandler.getGraph(), "graph.txt");
     // Read the graph from file
     Graph myGraph;
     GraphHandler::readAdjacencyList("graph.txt", myGraph);
