@@ -179,6 +179,11 @@ void computePartitionWeights(const vector<int>& partition, vector<int>& nodeWeig
         // Add the weight of the current node to the corresponding partition's total weight
         partitionWeights[currentPartition] += nodeWeights[i];
     }
+    cout <<" "<< endl;
+    for (const auto& entry : partitionWeights) {
+        cout << "Partition " << entry.first << ": Total Weight = " << entry.second << std::endl;
+    }
+    cout <<" "<< endl;
 
 }
 
@@ -454,10 +459,7 @@ void removeElementsFromAdjacency(int i, vector<int> keepPositionOfL, vector<vect
 
 void updateAdjacencyList(Graph &myGraph,  vector<vector<pair<int,int>>>& pairList, vector<vector<pair<int,int>>>& NewAdjacencyList, vector<int>& allNodes,vector<int>& newNodeWeights,int& sizeCounter) {
 
-
-    cout <<"-----------------------------"<< endl;
-    cout <<"START UPDATE ADJ LIST" << endl;
-    cout <<"-----------------------------"<< endl;
+    lck.lock();
     Graph copy = myGraph;
     pairList.resize(myGraph.graph.size() / 2);
     NewAdjacencyList.resize(myGraph.graph.size() / 2);
@@ -472,7 +474,8 @@ void updateAdjacencyList(Graph &myGraph,  vector<vector<pair<int,int>>>& pairLis
 
         int indexToWrite = z + 1;
         //build and update new Adjacency List
-        cout <<"ERROR HERE line 470"<< endl;
+
+
         for (const auto &pair: copy.graph[nodeWithFewestAdjacents]) {
             int nodeToWrite = pair.first;
             int weightToWrite = pair.second;
@@ -502,7 +505,8 @@ void updateAdjacencyList(Graph &myGraph,  vector<vector<pair<int,int>>>& pairLis
             }
 
         }
-        cout <<"Passed here line 501"<< endl;
+
+        lck.unlock();
 
         int indexedNodeWithFewest = nodeWithFewestAdjacents + 1;
         // Remove pairs with pair.first equal to ( indexToWrite | indexedNodeWithFewest )
@@ -514,23 +518,39 @@ void updateAdjacencyList(Graph &myGraph,  vector<vector<pair<int,int>>>& pairLis
                           }),
                 copy.graph[z].end());
         lck.unlock();
-cout <<"not passed"<< endl;
 
 
+
+
+        cout << "sizeCounter value BEFORE: " << sizeCounter << endl;
+        int myVal = 1;
+        cout << "NEW adj List BEFORE is:" << endl;
+        for (const auto &vector: NewAdjacencyList) {
+            cout << myVal++ << " ";
+            for (const auto &pair: vector) {
+                cout << "(" << pair.first << ", " << pair.second << ") ";
+            }
+            cout << " " << endl;
+        }
         //create new list starting from node 0
         for (const auto &pair: copy.graph[z]) {
+            lck.lock();
             NewAdjacencyList[sizeCounter].emplace_back(pair);
+            cout << "sizeC AFTER: " << sizeCounter << endl;
+                    cout << "(" << pair.first << ", " << pair.second << ") "<< endl;
+            lck.unlock();
         }
 
 
-cout <<"Problem line 522"<< endl;
+
+
         //push the pair into the pair List:
-        //unique_lock<mutex> myLck{mtx};
         lck.lock();
         pairList[sizeCounter].emplace_back(indexToWrite, indexedNodeWithFewest);
         sizeCounter++;
         lck.unlock();
-        //myLck.release();
+
+
     }
 
     lck.lock();
@@ -580,7 +600,7 @@ cout <<"Problem line 522"<< endl;
 
         }
     }
-    cout <<"update weights and newAdj"<< endl;
+
     //UPDATE adjList & weights
     myGraph.graph = NewAdjacencyList;
     myGraph.nodeWeights = newNodeWeights;
@@ -607,17 +627,16 @@ cout <<"Problem line 522"<< endl;
         }
         std::cout << std::endl;
     }
-cout << "END reached"<< endl;
+
 }
 
 void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, int avgNodeWeight, vector<int> maxInterval,vector<int> minInterval, vector<bool>&locked,vector<int>& allNodes, vector<int>& newNodeWeights, int sizeCounter, vector<vector<pair<int,int>>> NewAdjacencyList,vector<vector<pair<int,int>>> pairList,  int thread_id, int num_threads) {
 
-
-
-
     //n_th = 4;
     //n = 16 -> 8  0 -> 2 1
-    sem_wait(&s);
+    //sem_wait(&s);
+
+    adjmtx.lock();
     int num_nodesHalved = myGraph.graph.size();
     int counter = thread_id*(num_nodesHalved/num_threads);
         while(counter < (num_nodesHalved/num_threads + thread_id*(num_nodesHalved/num_threads))) {
@@ -631,10 +650,13 @@ void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, in
             int totEdgeWeight = 0;
             int count_node = 1;
 
+
             vector<int> indexes;
             if (locked[nodeWithFewestAdjacents] == false) {
+                bestmtx.lock();
                 indexes.emplace_back(nodeWithFewestAdjacents);
                 allNodes.emplace_back(nodeWithFewestAdjacents);
+                bestmtx.unlock();
                 //select the node in the adjacency list whose summed weight is closest to the AVG node weight for the merging
                 pair<int, int> p = returnBestNode(myGraph, nodeWithFewestAdjacents, avgNodeWeight, maxInterval,
                                                   minInterval, locked); // index shift in vector
@@ -690,13 +712,17 @@ void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, in
             partitionSize--;
             counter++;
         }
+        adjmtx.unlock();
+
+        glock.lock();
     cout << "allNodes Are: ";
     for (int index = 0; index < allNodes.size() ; index++) {
 
         cout << allNodes[index] << " ";
     }
     cout << ""<< endl;
-    sem_post(&s);
+    glock.unlock();
+    //sem_post(&s);
 }
 
 Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize, int num_threads) {
@@ -744,7 +770,7 @@ Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize, int
 
     updateAdjacencyList(myGraph, pairList, NewAdjacencyList, allNodes, newNodeWeights, sizeCounter);
 
-    cout <<"va anche qui?"<< endl;
+
     partitionSize = newNodeWeights.size();
     copyGraph.pairList = pairList;
 /*
@@ -874,6 +900,9 @@ int main() {
          */
 
 
+    // if(myGraph.graph.size()/2 > myGraph.graph.size()/num_threads)
+    //if num_threads pow2
+
     int num_threads = 4;
     sem_init(&s, 0, num_threads);
     auto start_time = chrono::high_resolution_clock::now();
@@ -901,6 +930,7 @@ int main() {
     auto end_time = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end_time - start_time);
     cout << "Execution Time: " << duration.count() << " microseconds" << endl;
+    //sem_destroy(&s);
     return 0;
 }
 
