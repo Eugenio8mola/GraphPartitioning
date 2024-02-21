@@ -40,7 +40,7 @@ Each thread is responsible for executing the `corsenNodes` function on a separat
 
 The user specifies from the command line the number of threads `num_threads`.
 The number of `threads` to allocate is directly equivalent to the number of `subgraphs` to generate.
-The user can, in fact, allocate a maximum number of threads that is `num_threads < myGraph.graph.size()/ 2 ` and the allocated number must also be a power of 2, otherwise an error specifying the case is returned.
+The user can, in fact, allocate a maximum number of threads that is `num_threads < myGraph.graph.size()/2`  and the allocated number must also be a power of 2, otherwise an error specifying the case is returned.
 This is checked by the `isValidConfiguration` function.
 
 `step3`: Thread Execution:
