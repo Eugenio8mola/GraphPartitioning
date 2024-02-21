@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_set>
+#include <unordered_map>
 #include <math.h>
 #include <numeric>
 #include <stack>
@@ -12,12 +13,14 @@
 #include <chrono>
 #include <thread>
 #include <unistd.h>
+#include <mutex>
+#include <atomic>
 
 using namespace std;
 
-int k = 8;
-int n = 32;
-int maxWeight = 6;
+int k;
+int n;
+int maxWeight;
 
 atomic<int> totalCutCost(0);
 vector<int> Gain;
@@ -652,10 +655,10 @@ void updateAdjacencyList(Graph &myGraph,  vector<vector<pair<int,int>>>& pairLis
     lck.unlock();
 
     //Print New Coarsed graph
-    GraphHandler::print(myGraph);
+    //GraphHandler::print(myGraph);
 
     myGraph.pairList = pairList;
-    GraphHandler::printPairList(myGraph);
+    //GraphHandler::printPairList(myGraph);
     cout << "\n" << endl;
 
 }
@@ -852,10 +855,9 @@ void multilevelKL(Graph &multilevelGraph, vector<int>& partition, int &partition
 
 }
 
-int main()  {
+int main(int argc, char *argv[])  {
 
-    /*int argc, char *argv[]*/
-    /*
+    
     // Check command-line parameters
     if (argc != 5) {
         std::cerr << "Usage: " << argv[0] << " <num_nodes>  <max_node_weight> <num_partitions> <num_threads>" << std::endl;
@@ -866,9 +868,7 @@ int main()  {
     maxWeight = std::stoi(argv[2]);
     k = std::stoi(argv[3]);
     int num_threads = std::stoi(argv[4]);
-     */
-
-    int num_threads = 4;
+    
     auto start_time = chrono::high_resolution_clock::now();
     vector<int> partition(n, -1);
     //generate Graph
@@ -885,7 +885,7 @@ int main()  {
     cout << "\n\nGraph Generated."<< endl;
 
     //Uncomment to print the graph
-    GraphHandler::print(myGraph);
+    //GraphHandler::print(myGraph);
     isValidConfiguration(num_threads, myGraph);
     isPowerOf2( k, myGraph);
     isContiguous(myGraph);
