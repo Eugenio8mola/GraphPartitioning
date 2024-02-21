@@ -11,19 +11,17 @@
 #include <sstream>
 #include <chrono>
 #include <thread>
-#include <future>
 #include <unistd.h>
 
 using namespace std;
 
 int k = 8;
-int n = 256;
+int n = 32;
 int maxWeight = 6;
-
 
 atomic<int> totalCutCost(0);
 vector<int> Gain;
-mutex lck,cmtx,umtx, emtx, adjmtx,  bestmtx;
+mutex lck,cmtx,umtx, emtx, adjmtx;
 
 class Graph {
 
@@ -86,6 +84,27 @@ public:
         for (int i = 0; i < n; i++)
             g.nodeWeights[i] = distribution2(gen2);
     }
+    //
+    static Graph extract_subgraph(const Graph g, int index_start, int index_end) {
+        Graph subgraph;
+
+        // Copy nodes and their weights within the specified range
+        for (int i = index_start; i <= index_end; ++i) {
+            subgraph.nodeWeights.push_back(g.nodeWeights[i]);
+
+            // Filter graph based on the condition g.graph[i].first < (index_end + 1)
+            vector<pair<int, int>> filtered_graph;
+            for (const auto& node : g.graph[i]) {
+                if (node.first < (index_end + 1)) {
+                    filtered_graph.push_back(node);
+                }
+            }
+            subgraph.graph.push_back(filtered_graph);
+        }
+
+        return subgraph;
+    }
+
 
     //print Pairlist for uncoarsening
     static void printPairList(Graph g){
@@ -165,6 +184,18 @@ public:
         inFile.close();
     }
 };
+
+void isValidConfiguration(int num_threads, const Graph& myGraph) {
+    if (num_threads >= myGraph.graph.size() / 2) {
+        std::cerr << "Error: Number of threads must be less than half the size of the graph." << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    if ((num_threads & (num_threads - 1)) != 0) {
+        std::cerr << "Error: Number of threads must be a power of 2." << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+}
 
 void printPartition(const vector<int>& partition) {
     for (size_t i = 0; i < partition.size(); ++i) {
@@ -347,7 +378,8 @@ void isPowerOf2(int k, const Graph& graph) {
     // Check if graph size is a power of 2
     bool isGraphSizePowerOf2 = (graph.graph.size() > 0) && ((graph.graph.size() & (graph.graph.size() - 1)) == 0);
 
-    if (isKPowerOf2 && isGraphSizePowerOf2) {
+    bool isKlessOrEqThanSize = k <= graph.graph.size();
+    if (isKPowerOf2 && isGraphSizePowerOf2 && isKlessOrEqThanSize) {
         return;
     } else {
         cerr << "Error: ";
@@ -356,6 +388,9 @@ void isPowerOf2(int k, const Graph& graph) {
         }
         if (!isGraphSizePowerOf2) {
             cerr << "Graph size is not a power of 2.";
+        }
+        if (!isKlessOrEqThanSize) {
+            cerr << "K is not lower than Graph size.";
         }
         cerr << endl;
 
@@ -396,7 +431,7 @@ void isContiguous(const Graph& graph) {
 
 }
 
-int findNodeWithFewestAdjacents(const std::vector<std::vector<pair<int,int>>>& adjacencyList, vector<bool>& locked) {
+int findNodeWithFewestAdjacents(const std::vector<std::vector<pair<int,int>>>& adjacencyList, vector<bool>& locked, const int index_start, const int index_end) {
 
     if (adjacencyList.empty()) {
         // Handle the case where the adjacency list is empty
@@ -404,7 +439,7 @@ int findNodeWithFewestAdjacents(const std::vector<std::vector<pair<int,int>>>& a
         return -1;
     }
 
-    bool allTrue = std::all_of(locked.begin(), locked.end(), [](bool value) {
+    bool allTrue = std::all_of(locked.begin() + index_start, locked.begin() + index_end + 1, [](bool value) {
         return value;
     });
 
@@ -415,25 +450,29 @@ int findNodeWithFewestAdjacents(const std::vector<std::vector<pair<int,int>>>& a
     int nodeWithFewestAdjacents;
 
     for (int i = 0; i < adjacencyList.size(); ++i) {
-        if(locked[i] == true)
+        if(locked[index_start + i] == true)
             continue;
         if (adjacencyList[i].size() <= minAdjacentNodes) {
             minAdjacentNodes = adjacencyList[i].size();
             nodeWithFewestAdjacents = i;
         }
+
     }
 
+    nodeWithFewestAdjacents = nodeWithFewestAdjacents + index_start;
+    locked[nodeWithFewestAdjacents] = true;
     return nodeWithFewestAdjacents;
 
 }
 
-pair<int,int> returnBestNode(const Graph& myGraph, int nodeWithFewestAdjacents, int treshold, vector<int> maxInt,vector<int> minInt, vector<bool> locked) {
+pair<int,int> returnBestNode(const Graph& myGraph, const Graph& subgraph,int nodeWithFewestAdjacents, int treshold, vector<int> maxInt,vector<int> minInt, vector<bool> locked, const int index_start, const int index_end) {
+
 
 
     int nearTreshold = std::numeric_limits<int>::max();
     int bestNode = -1;
     int edgeWeight = 0;
-    for (const auto &edge: myGraph.graph[nodeWithFewestAdjacents]) {
+    for (const auto &edge: subgraph.graph[nodeWithFewestAdjacents-index_start]) {
 
         int nodeWithFewestAdjacentsWeight = myGraph.nodeWeights[nodeWithFewestAdjacents];
         int node_num = edge.first - 1;
@@ -465,7 +504,6 @@ pair<int,int> returnBestNode(const Graph& myGraph, int nodeWithFewestAdjacents, 
             }
         }
     }
-
     return {bestNode,edgeWeight};
 }
 
@@ -484,6 +522,7 @@ void removeElementsFromAdjacency(int i, vector<int> keepPositionOfL, vector<vect
 }
 
 void updateAdjacencyList(Graph &myGraph,  vector<vector<pair<int,int>>>& pairList, vector<vector<pair<int,int>>>& NewAdjacencyList, vector<int>& allNodes,vector<int>& newNodeWeights,int& sizeCounter) {
+
 
     lck.lock();
     Graph copy = myGraph;
@@ -532,7 +571,6 @@ void updateAdjacencyList(Graph &myGraph,  vector<vector<pair<int,int>>>& pairLis
         }
 
         lck.unlock();
-
         int indexedNodeWithFewest = nodeWithFewestAdjacents + 1;
         // Remove pairs with pair.first equal to ( indexToWrite | indexedNodeWithFewest )
         lck.lock();
@@ -614,94 +652,48 @@ void updateAdjacencyList(Graph &myGraph,  vector<vector<pair<int,int>>>& pairLis
     lck.unlock();
 
     //Print New Coarsed graph
-    //GraphHandler::print(myGraph);
+    GraphHandler::print(myGraph);
 
     myGraph.pairList = pairList;
-    //GraphHandler::printPairList(myGraph);
+    GraphHandler::printPairList(myGraph);
     cout << "\n" << endl;
 
 }
 
-void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, int avgNodeWeight, vector<int> maxInterval,vector<int> minInterval, vector<bool>&locked,vector<int>& allNodes, vector<int>& newNodeWeights, int sizeCounter, vector<vector<pair<int,int>>> NewAdjacencyList,vector<vector<pair<int,int>>> pairList,  int thread_id, int num_threads) {
+void coarsenNodes(Graph &myGraph, vector<int>& partition, int &partitionSize, int avgNodeWeight, vector<int> maxInterval,vector<int> minInterval, vector<bool>&locked,vector<int>& allNodes, vector<int>& newNodeWeights, int sizeCounter, vector<vector<pair<int,int>>> NewAdjacencyList,vector<vector<pair<int,int>>> pairList,  int thread_id, int num_threads)
+{
 
-    adjmtx.lock();
-    int num_nodesHalved = myGraph.graph.size();
-    int counter = thread_id*(num_nodesHalved/num_threads);
-    while(counter < (num_nodesHalved/num_threads + thread_id*(num_nodesHalved/num_threads))) {
-        int nodeWithFewestAdjacents = findNodeWithFewestAdjacents(myGraph.graph, locked);
-        //cout << "Node With Fewest : " << nodeWithFewestAdjacents << endl;
-        if (nodeWithFewestAdjacents == -1)
+
+    int index_start = thread_id*(myGraph.graph.size()/num_threads);
+    int index_end = (myGraph.graph.size()/num_threads + thread_id*(myGraph.graph.size()/num_threads));
+    int counter = index_start;
+    vector<int> localNodes;
+    Graph subgraph = GraphHandler::extract_subgraph(myGraph, index_start, index_end - 1);
+    while(counter < index_end) {
+        int nodeWithFewestAdjacents = findNodeWithFewestAdjacents(subgraph.graph, locked, index_start, index_end);
+        adjmtx.lock();
+        //cout << "Node With Fewest : " << nodeWithFewestAdjacents << "  thread_id : " << thread_id << endl;
+        adjmtx.unlock();
+        if (nodeWithFewestAdjacents == -1) {
             break;
-
-        int weight;
-        int nodeWeight = myGraph.nodeWeights[nodeWithFewestAdjacents];
-        int totEdgeWeight = 0;
-        int count_node = 1;
-
-
-        vector<int> indexes;
-        if (locked[nodeWithFewestAdjacents] == false) {
-            bestmtx.lock();
-            indexes.emplace_back(nodeWithFewestAdjacents);
-            allNodes.emplace_back(nodeWithFewestAdjacents);
-            bestmtx.unlock();
-            //select the node in the adjacency list whose summed weight is closest to the AVG node weight for the merging
-            pair<int, int> p = returnBestNode(myGraph, nodeWithFewestAdjacents, avgNodeWeight, maxInterval,
-                                              minInterval, locked); // index shift in vector
-            int node_num = p.first;
-            if (locked[node_num] == true)
-                continue;
-            weight = p.second;
-            nodeWeight += myGraph.nodeWeights[node_num];
-            totEdgeWeight += weight;
-            count_node++;
-
-
-
-            auto it = std::find(maxInterval.begin(), maxInterval.end(), nodeWeight);
-            if (it != maxInterval.end()) {
-                indexes.emplace_back(node_num);
-                allNodes.emplace_back(node_num);
-
-                for (int index = 0; index < indexes.size(); index++) {
-                    locked[indexes[index]] = true;
-                    partition[indexes[index]] = partitionSize;
-
-                }
-
-                newNodeWeights.emplace_back(nodeWeight);
-
-            } else {
-                if (nodeWeight < avgNodeWeight && count_node != 1) {
-                    auto it = std::find(minInterval.begin(), minInterval.end(), nodeWeight);
-                    if (it != minInterval.end()) {
-                        indexes.emplace_back(node_num);
-                        allNodes.emplace_back(node_num);
-
-                        for (int index = 0; index < indexes.size(); index++) {
-                            locked[indexes[index]] = true;
-                            partition[indexes[index]] = partitionSize;
-
-                        }
-
-                        newNodeWeights.emplace_back(nodeWeight);
-
-
-                    } else {
-                        indexes.emplace_back(node_num);
-                    }
-
-                } else {
-                    nodeWeight -= myGraph.nodeWeights[node_num];
-                }
-            }
-
         }
+
+        localNodes.emplace_back(nodeWithFewestAdjacents);
+        adjmtx.lock();
+        int nodeWeight =0;
+        nodeWeight+= myGraph.nodeWeights[nodeWithFewestAdjacents];
+        adjmtx.unlock();
+
+        adjmtx.lock();
+        newNodeWeights.emplace_back(nodeWeight);
+        adjmtx.unlock();
+
         partitionSize--;
         counter++;
     }
+    adjmtx.lock();
+    allNodes.insert(allNodes.end(), localNodes.begin(), localNodes.end());
     adjmtx.unlock();
-
 }
 
 Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize, int num_threads) {
@@ -744,6 +736,10 @@ Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize, int
     for (auto& thread : threads) {
         thread.join();
     }
+
+//    cout <<"AllNodes: "<< endl;
+//    printPartition(allNodes);
+
 
     updateAdjacencyList(myGraph, pairList, NewAdjacencyList, allNodes, newNodeWeights, sizeCounter);
 
@@ -827,7 +823,7 @@ void multilevelKL(Graph &multilevelGraph, vector<int>& partition, int &partition
         auto coarse_end_time = chrono::high_resolution_clock::now();
         auto coarse_duration = chrono::duration_cast<chrono::microseconds>(coarse_end_time - coarse_start_time);
         effective_time = chrono::duration_cast<chrono::microseconds>( effective_time + coarse_duration);
-        cout << "Coarsening Time: " << effective_time.count() << " microseconds" << endl;
+        //cout << "Coarsening Time: " << effective_time.count() << " microseconds" << endl;
         fold++;
         partitionSize = partitionSize/2;
         multilevelKL(multilevelGraph, partition, partitionSize, n/2, num_threads);
@@ -844,57 +840,53 @@ void multilevelKL(Graph &multilevelGraph, vector<int>& partition, int &partition
         auto uncoarse_end_time = chrono::high_resolution_clock::now();
         auto uncoarse_duration = chrono::duration_cast<chrono::microseconds>(uncoarse_end_time - uncoarse_start_time);
         un_effective_time = chrono::duration_cast<chrono::microseconds>( un_effective_time + uncoarse_duration);
-        cout << "Uncoarsening Time: " << un_effective_time.count() << " microseconds" << endl;
+        //cout << "Uncoarsening Time: " << un_effective_time.count() << " microseconds" << endl;
         auto kl_start_time = chrono::high_resolution_clock::now();
         kernighanLin(copyGraph, partition);
         auto kl_end_time = chrono::high_resolution_clock::now();
         auto kl_duration = chrono::duration_cast<chrono::microseconds>(kl_end_time - kl_start_time);
         kl_effective_time = chrono::duration_cast<chrono::microseconds>( kl_effective_time + kl_duration);
-        cout << "Kernighan-Lin Time: " << kl_effective_time.count() << " microseconds" << endl;
+        //cout << "Kernighan-Lin Time: " << kl_effective_time.count() << " microseconds" << endl;
 
     }
 
 }
 
-int main() {
+int main()  {
 
-
-    //int main(int argc, char *argv[]) {
-    // Check for command-line parameter specifying the number of threads
+    /*int argc, char *argv[]*/
     /*
-    if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <num_threads>" << std::endl;
-        return 1;
+    // Check command-line parameters
+    if (argc != 5) {
+        std::cerr << "Usage: " << argv[0] << " <num_nodes>  <max_node_weight> <num_partitions> <num_threads>" << std::endl;
+        return EXIT_FAILURE;;
     }
 
-
-    int num_threads = std::stoi(argv[1]);
+    n = std::stoi(argv[1]);
+    maxWeight = std::stoi(argv[2]);
+    k = std::stoi(argv[3]);
+    int num_threads = std::stoi(argv[4]);
      */
 
-
-    // if(myGraph.graph.size()/2 > myGraph.graph.size()/num_threads)
-    //if num_threads pow2
-
-    int num_threads = 16;
+    int num_threads = 4;
     auto start_time = chrono::high_resolution_clock::now();
     vector<int> partition(n, -1);
     //generate Graph
     auto generation_start_time = chrono::high_resolution_clock::now();
-    //GraphHandler myGraphHandler(n, maxWeight);
+    GraphHandler myGraphHandler(n, maxWeight);
     auto generation_end_time = chrono::high_resolution_clock::now();
     auto gen_duration = chrono::duration_cast<chrono::microseconds>(generation_end_time - generation_start_time);
-    cout << "Generation Time: " << gen_duration.count() << " microseconds" << endl;
+    //cout << "Generation Time: " << gen_duration.count() << " microseconds" << endl;
     // Save the graph
-    //GraphHandler::saveAdjacencyList(myGraphHandler.getGraph(), "graph.txt");
+    GraphHandler::saveAdjacencyList(myGraphHandler.getGraph(), "graph.txt");
     // Read the graph from file
     Graph myGraph;
     GraphHandler::readAdjacencyList("graph.txt", myGraph);
     cout << "\n\nGraph Generated."<< endl;
 
     //Uncomment to print the graph
-    //GraphHandler::print(myGraph);
-
-
+    GraphHandler::print(myGraph);
+    isValidConfiguration(num_threads, myGraph);
     isPowerOf2( k, myGraph);
     isContiguous(myGraph);
     int partitionSize = myGraph.graph.size()/2;
@@ -903,38 +895,6 @@ int main() {
     printPartition(partition);
     auto end_time = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end_time - start_time);
-    cout << "Execution Time: " << duration.count() << " microseconds" << endl;
+    //cout << "Execution Time: " << duration.count() << " microseconds" << endl;
     return 0;
 }
-
-#if 0
-//-----------GRAPH model example-------------
-//    Graph myGraph;
-    myGraph.graph.resize(8);
-    myGraph.nodeWeights = {1, 4, 5, 2, 3, 6, 5, 3};
-
-    myGraph.graph[0].emplace_back(5, 1);
-    myGraph.graph[0].emplace_back(3, 2);
-    myGraph.graph[0].emplace_back(2, 1);
-    myGraph.graph[1].emplace_back(1, 1);
-    myGraph.graph[1].emplace_back(3, 2);
-    myGraph.graph[1].emplace_back(4, 1);
-    myGraph.graph[2].emplace_back(5, 3);
-    myGraph.graph[2].emplace_back(4, 2);
-    myGraph.graph[2].emplace_back(2, 2);
-    myGraph.graph[2].emplace_back(1, 2);
-    myGraph.graph[3].emplace_back(2, 1);
-    myGraph.graph[3].emplace_back(3, 2);
-    myGraph.graph[3].emplace_back(6, 2);
-    myGraph.graph[3].emplace_back(7, 5);
-    myGraph.graph[4].emplace_back(1, 1);
-    myGraph.graph[4].emplace_back(3, 3);
-    myGraph.graph[4].emplace_back(6, 2);
-    myGraph.graph[5].emplace_back(5, 2);
-    myGraph.graph[5].emplace_back(4, 2);
-    myGraph.graph[5].emplace_back(7, 6);
-    myGraph.graph[6].emplace_back(6, 6);
-    myGraph.graph[6].emplace_back(4, 5);
-    myGraph.graph[6].emplace_back(8, 3);
-    myGraph.graph[7].emplace_back(7, 3);
-#endif
