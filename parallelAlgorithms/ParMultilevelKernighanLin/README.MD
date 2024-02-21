@@ -202,31 +202,11 @@ It returns:
 + `nodeWithFewestAdjacents` the index of the found node, if a node is found   
 + `-1` if all nodes are locked or the provided adjacency list is empty.  
    
-It takes two parameters:  
+It takes four parameters:  
 1. the vector of vector of pairs of integers `adjacencyList` which is the adjacency list of the graph  
-2. the vector of boolean values `locked` which is used to keep track of nodes already coarsed and that should not be considered.  
-
-## `returnBestNode`
-
-The `returnBestNode` function finds the best node to coarse in order to generate a `supernode`.
-The `bestNode` is selected among the ones in the adjacency list of the node with the fewest number of adjacents returned by the function `findNodeWithFewestAdjacents`.  
-This function selects appropriately the best matching node considering the sum of the node weights of the nodes to merge and compares it with a `threshold`computed on the entire node weigth set.   
-Together with the `threshold` two intervals are also passed.    
-This procedure turns the coarsening process into a `smart coarsening`.  
-
-The method returns:  
-+ the `pair<int, int>` = `(bestNode,edgeWeight)` in which:  
-`bestNode` is the index of the best node found   
-`edgeWeight` is the edge weight of the best node found.
-
-It takes six parameters:  
-1. the Graph class `myGraph`  
-2. the node for which the best pairing needs to be determined `nodeWithFewestAdjacents`   
-3. the threshold parameter setting a condition for selecting the best pairing node `threshold`, nodes that meet or exceed this threshold are considered suitable candidates for pairing.   
-4. the vector `maxInt` that constrains the selection of pairing nodes based on one of the corresponding maximum values specified in this vector used as correction factor to the threshold value.   
-5. the vector `minInt` that constrains the selection of pairing nodes based on one of the corresponding minimum values specified in this vector used as correction factor to the threshold value. 
-6. the boolean vector `locked` indicating whether each node in the graph is locked or not. 
-   Locked nodes are excluded from consideration as potential pairing candidates, ensuring that they remain unchanged during the pairing process.  
+2. the vector of boolean values `locked` which is used to keep track of nodes already coarsed and that should not be considered  
+3. the starting index delimiting the access zone in the size of the subgraph `index_start`, 
+4. the ending index delimiting the access zone in the size of the subgraph G `index_end`, 
 
 ## `removeElementsFromAdjacency`
 
@@ -263,17 +243,22 @@ The function takes six parameters:
 ## `coarseGraph`
 
 The `coarseGraph` function performs graph coarsening by merging nodes based on certain criteria, updating the graph   structure, adjacency list, node weights and returning a coarser graph.  
-Computations performed involve multiple calls to the `updateAdjacencyList` function, the `returnBestNode` function and the `findNodeWithFewestAdjacents` function.  
+Computations performed involve multiple calls to the `updateAdjacencyList` function and  the `coarsenNodes` function run   
+by each allocated thread.
 Selected pairs of nodes are merged into `supernodes` and a `pairList` storing the pairs used for the merging process is generated.  
 
 Returns:  
 + the Graph class `copyGraph` which is the graph at the `n-1` coarsening stage that will be used recursively in the 
   uncoarsening process.
   
-It receives three parameters:   
+It receives four parameters:   
 1. the input graph to be coarsed `myGraph`.    
 2. the vector `partition` storing the partition assignments for each node of the input graph to be coarsed.  
 3. the reference to the size of the partition `partitionSize`.  
+4. the number of threads to allocate  `num_threads`.  
+
+## `coarsenNodes`
+
 
 ## `uncoarseGraph`
 
