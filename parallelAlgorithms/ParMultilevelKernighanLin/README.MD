@@ -125,6 +125,23 @@ maximum node weight `max_w`.
 ## `getGraph`  
 Returns the `Graph` stored in the GraphHandler object.
 
+## `extract_subgraph`  
+The `extract_subgraph` function is responsible for extracting a subgraph from a given graph `G` within a specified index range `index_start` and `index_end`.  
+Initializes an empty Graph object named subgraph.
+Copies node weights from the original graph to the subgraph within the specified index range.
+Filters the adjacency list of each node in the specified range based on a condition `(node.first < (index_end + 1))`, ensuring that only connections within the subgraph are retained allowing parallelization.
+Constructs the subgraph by adding filtered adjacency lists for each node within the specified index range.
+Then, returns the constructed subgraph.
+
+Receives three parameters:  
+
+1. `g`: the original graph from which the subgraph will be extracted.
+2. `index_start` : the starting index of the subgraph.
+3. `index_end`: the ending index of the subgraph.
+
+
+Returns the `Graph` subgraph, the constructed subgraph.
+
 ## `printPairList`
 Prints the pair list used for uncoarsing the `Graph g`.
 
