@@ -77,6 +77,6 @@ Before running any of the algorithms implemented, read the `README` of the desir
 Further details on execution mode, parameters to pass to run the program and functions used are provided.  
 
 ## Authors
-Eugenio Liotine
-Abolfazl Javidian
+### `Eugenio Liotine`  
+### `Abolfazl Javidian`
 
