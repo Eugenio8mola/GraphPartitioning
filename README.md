@@ -56,7 +56,7 @@ To use the programs in this repository, follow these steps:
 1. Compile the program using your preferred C++ compiler:
 
    ```bash
-   g++ -o partition main.cpp
+   g++ -o programName main.cpp
    ```
 
 2. Run the program:
