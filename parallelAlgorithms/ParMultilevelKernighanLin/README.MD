@@ -177,6 +177,7 @@ It takes two parameters:
 ## `isPowerOf2`
 
 The `isPowerOf2` function checks if both the input integer `k` and the size of the graph in terms of number of nodes `n` are powers of 2.  
+It also checks that the number of partition `k` is doesn't exceed the number of nodes `n`.
 It utilizes bitwise operations to determine whether `k` and `n` are powers of 2. 
 If this condition is not satisfied it prints an `ERROR`.  
 
