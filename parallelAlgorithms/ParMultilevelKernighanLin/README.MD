@@ -1,6 +1,12 @@
 
 # Parallel Multilevel Kernighan-Lin
-The parallel multilevel Kernighan-Lin algorithm is a graph partitioning technique that adopts an advanced stategy to efficiently divide a graph of `n` nodes into `k` partitions. (with `n` and `k` powers of 2)    
+The parallel multilevel Kernighan-Lin algorithm is a graph partitioning technique that implements multithreading over the
+multilevel Kernighan-Lin algorithm in order to possibly reach an improvement in terms of performances.
+A number of threads `num_threads` specified by the user is used for the run of the program.
+The stategy adopted modifies the sequential version by introducing a function that creates `num_threads` subgraphs from the original Graph `G`.
+Threads are then launched on these just created graphs.
+The coarseGraph function has been simplified wiht a more simpler stategy in order to reduce data dependency.
+Just like the multilevel Kernighan-Lin, the parallel multilevel Kernighan-Lin algorithm adopts an advanced stategy to efficiently divide a graph of `n` nodes into `k` partitions. (with `n` and `k` powers of 2)    
 This technique completes the Kernighan-Lin algorithm for graph partitioning, which considers only the edge weights (node weights are considered to be all equal to 1), by considering also the node weights in order to  produce partitions whose total node weigth is balanced and whose edge cut size is minimized.   
 It employs a strategy based on a divide and conquer approach.     
 The initial graph is coarsed into a smaller one by recursive calls to the `coarseGraph` method.     
@@ -20,27 +26,35 @@ By employing coarsening and uncoarsening strategies, the multilevel Kernighan-Li
 
 ## Multithreading Section
 
-The multithreading approach aims to improve performance by utilizing multiple CPU cores for parallel computation, thereby potentially reducing the overall execution time. We initialize two threads (Th1 and Th2) to concurrently execute the GGGP function on two subgraphs (g1 and g2):
+The multithreading approach aims to improve performance by utilizing multiple CPU cores for parallel computation, thereby potentially reducing the overall execution time.
+A multithreading version is obtained by dividing the initial graph `G`, into a number of `subgraphs` equal to the number of threads `num_threads` using the function `extract_subgraph`.
+In this way, each thread is responsible for the coarsing of a specific part of the original graph `G`.
+This allows to execute operations in parallel without running into race conditions.
 
 `step1`: Thread Creation:
 
-Two thread objects (Th1 and Th2) are declared.
-Each thread is responsible for executing the GGGP function on a separate subgraph.
+A thread pool with a number of threads `num_threads` specified by the user is created inside the `coarseGraph` function.
+Each thread is responsible for executing the `corsenNodes` function on a separate `subgraph`.
 
-`step2`: Conditional Thread Launch:
+`step2`: Thread Conditions:
 
-The decision to launch a thread is based on the size of the subgraph partitions (partitions[0] and partitions[1]).
-If a partition contains at least two vertices (partitions[i].size() >= 2), a corresponding thread is created to process the subgraph.
+The user specifies from the command line the number of threads `num_threads`.
+The number of `threads` to allocate is directly equivalent to the number of `subgraphs` to generate.
+The user can, in fact, allocate a maximum number of threads that is `num_threads < myGraph.graph.size()/ 2 ` and the allocated number must also be a power of 2, otherwise an error specifying the case is returned.
+This is checked by the `isValidConfiguration` function.
 
 `step3`: Thread Execution:
 
-The GGGP function is called recursively on the subgraph using the std::thread constructor.
-Each thread is assigned a subgraph (g1 or g2) and the same partitioning depth (`np` as a number of partitions in each iteration).
+The `coarsenNodes` function is called by each thread on the generated subgraph for that specific thread using the std::thread constructor.
+Each thread is in charge of coarsing the graph into a smaller one.
+The process is iterated until the coarsest graph is reached.
 
 `step4`: Thread Synchronization:
 
-After launching both threads, the main thread waits for their completion before proceeding further.
-The join() method is called on each thread object (Th1.join() and Th2.join()), which blocks the main thread until the associated thread finishes execution.
+Threads are synchronized after that, at each call of the `coarseGraph` function, the `coarsenNodes` function has finished to coarse the number of nodes present in the subgraph that it has to process.
+Lauched threads are joined inside the `coarseGraph` function.
+A join() is used to wait for result, then the program applies the partition and starts the uncoarsening by unfolding the coarsed pairs.
+
 
 ## Supported Platforms
 
@@ -57,7 +71,7 @@ To use the programs in this repository, follow these steps:
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/Eugenio8mola/GraphPartitioning/sequentialAlgorithms/multilevelKernighanLin.git
+   git clone https://github.com/Eugenio8mola/GraphPartitioning/parallelAlgorithms/ParMultilevelKernighanLin.git
 
 2. Navigate to the project directory:
 
@@ -77,13 +91,15 @@ To use the programs in this repository, follow these steps:
 2. Run the program:
 
    ```bash
-   ./ParMultilevelKL num_nodes max_node_weight num_partitions
+   ./ParMultilevelKL num_nodes max_node_weight num_partitions num_threads
    ```
 
    Replace:  
    `num_nodes` with the desired number of nodes that should be used for graph generation,  
    `max_node_weight` with the maximum node weight that should be used for graph generation,  
    `num_partitions` with the desired number of partitions that should be applied.
+   `num_threads` with the desired number of partitions that should be applied.
+
 
 # GraphHandler Class
 
