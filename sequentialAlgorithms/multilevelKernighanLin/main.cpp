@@ -162,6 +162,16 @@ public:
 };
 
 
+void printPartition(const vector<int>& partition) {
+    for (size_t i = 0; i < partition.size(); ++i) {
+        std::cout << partition[i];
+        if (i != partition.size() - 1) {
+            cout << " ";
+        }
+    }
+    cout << endl;
+}
+
 void computePartitionWeights(const vector<int>& partition, vector<int>& nodeWeights) {
 
     unordered_map<int, int> partitionWeights;
@@ -219,39 +229,20 @@ int computeCutCost(Graph& myGraph, vector<int>& partition) {
 
     }
 
-    //Debug
-#if 0
-    std::cout << " extVs : ";
-    for (int value : extVs) {
-        std::cout << value << " ";
-    }
-    std::cout << std::endl;
-
-    std::cout << " intVs : ";
-    for (int value : intVs) {
-        std::cout << value << " ";
-    }
-    std::cout << std::endl;
-
-
-    std::cout << " Gain : ";
-    for (int value : Gain) {
-        std::cout << value << " ";
-    }
-    std::cout << std::endl;
-#endif
 
     // Divide each element by 2
     for (int& cost : cutCost) {
         cost /= 2;
     }
-    cout << "Computed cut cost for each partition is: " << endl;
-    for(size_t t = 0; t < cutCost.size(); t++)
-    {
-        cout << "Partition " << t + 1 << ":  " << cutCost[t]<< endl;
-    }
 
-    cout << "The total cut cost of this partition is: " << accumulate(cutCost.begin(),cutCost.end(),0) << endl;
+    //CutCost for each partition
+//    cout << "Computed cut cost for each partition is: " << endl;
+//    for(size_t t = 0; t < cutCost.size(); t++)
+//    {
+//        cout << "Partition " << t + 1 << ":  " << cutCost[t]<< endl;
+//    }
+//
+//    cout << "The total cut cost of this partition is: " << accumulate(cutCost.begin(),cutCost.end(),0) << endl;
 
     return accumulate(cutCost.begin(),cutCost.end(),0);
 }
@@ -263,14 +254,14 @@ void kernighanLin(Graph& myGraph, vector<int>& partition) {
     vector<bool> locked(nodes, false);
 
 
-    cout << "KL algorithm has been launched!" << endl;
+   // cout << "KL algorithm has been launched!" << endl;
 
     bool improvement = true;
     vector<pair<int, int>> nodePair;
     pair<int, int> maxPositionIndedeces;
     vector<int> Glist;
 
-    cout <<"Initial Cut Cost" << endl;
+    //cout <<"Initial Cut Cost" << endl;
     int initialCutCost = computeCutCost(myGraph, partition);
 
     int count = 0;
@@ -279,7 +270,7 @@ void kernighanLin(Graph& myGraph, vector<int>& partition) {
         improvement = false;
         for (size_t iter = 0; iter < n_iterations; iter++) {
             count = iter;
-            cout << "\nIteration : ["<< iter<<"]"<< endl;
+            //cout << "\nIteration : ["<< iter<<"]"<< endl;
             int maxGain = 0;
             for (int i = 0; i < nodes; i++) {
                 if (!locked[i]) {
@@ -323,7 +314,7 @@ void kernighanLin(Graph& myGraph, vector<int>& partition) {
                 }
             }
 
-            cout << "Max Gain is: " << maxGain << endl;
+            //cout << "Max Gain is: " << maxGain << endl;
             Glist.emplace_back(maxGain);
 
             //Swap
@@ -352,16 +343,12 @@ void kernighanLin(Graph& myGraph, vector<int>& partition) {
 
         }
     }
-    cout <<"*---------------------------------------------------------------------------------------------------------------------------------------------------------*" << endl;
-    cout << "Partition after KL:  ";
-    for (int i = 0; i < partition.size(); ++i) {
-        cout << partition[i] << " ";
-    }
-    cout << endl;
-
-    cout <<"*---------------------------------------------------------------------------------------------------------------------------------------------------------*" << endl;
-    computePartitionWeights(partition, myGraph.nodeWeights);
-    computeCutCost(myGraph, partition);
+//    cout <<"*---------------------------------------------------------------------------------------------------------------------------------------------------------*" << endl;
+//    cout << "Partition after KL:  ";
+//    printPartition(partition);
+//    cout <<"*---------------------------------------------------------------------------------------------------------------------------------------------------------*" << endl;
+    int finalCutCost = computeCutCost(myGraph, partition);
+    cout <<"CutSize after KL execution is: " << finalCutCost << endl;
 }
 
 void isPowerOf2(int k, const Graph& graph) {
@@ -371,7 +358,8 @@ void isPowerOf2(int k, const Graph& graph) {
     // Check if graph size is a power of 2
     bool isGraphSizePowerOf2 = (graph.graph.size() > 0) && ((graph.graph.size() & (graph.graph.size() - 1)) == 0);
 
-    if (isKPowerOf2 && isGraphSizePowerOf2) {
+    bool isKlessOrEqThanSize = k <= graph.graph.size();
+    if (isKPowerOf2 && isGraphSizePowerOf2 && isKlessOrEqThanSize) {
         return;
     } else {
         cerr << "Error: ";
@@ -380,6 +368,9 @@ void isPowerOf2(int k, const Graph& graph) {
         }
         if (!isGraphSizePowerOf2) {
             cerr << "Graph size is not a power of 2.";
+        }
+        if (!isKlessOrEqThanSize) {
+            cerr << "K is not lower than Graph size.";
         }
         cerr << endl;
 
@@ -570,28 +561,12 @@ void updateAdjacencyList(Graph &myGraph,  vector<vector<pair<int,int>>>& pairLis
 
 }
 
-//    cout << "Adjacency List is:" << endl;
-//    for (const auto &vector: NewAdjacencyList) {
-//        for (const auto &pair: vector) {
-//            cout << "(" << pair.first << ", " << pair.second << ") ";
-//        }
-//        cout << "" << endl;
-//    }
 
     //UPDATE new adj list
     vector<vector<bool>> marked(NewAdjacencyList.size());
     for (size_t i = 0; i < NewAdjacencyList.size(); ++i) {
         marked[i].resize(NewAdjacencyList[i].size(), false);
     }
-
-    //PRINT MARKED
-//    for (size_t i = 0; i < marked.size(); ++i) {
-//        std::cout << "Row " << i << ": ";
-//        for (size_t j = 0; j < marked[i].size(); ++j) {
-//            std::cout << marked[i][j] << " ";
-//        }
-//        std::cout << std::endl;
-//    }
 
     bool update = false;
 
@@ -625,28 +600,6 @@ void updateAdjacencyList(Graph &myGraph,  vector<vector<pair<int,int>>>& pairLis
                         update = false;
                         keepPositionOfL.clear();
 
-                        //PRINT LISTS and print updated boolean matrix
-//                        static int myVal = 1;
-//                        cout << "-----------------------------------------------------" << endl;
-//                        cout << "Pass: " << myVal  << endl;
-//                        myVal++;
-//                        cout << "Adjacency List is:" << endl;
-//                        for (const auto &vector: NewAdjacencyList) {
-//                            for (const auto &pair: vector) {
-//                                cout << "(" << pair.first << ", " << pair.second << ") ";
-//                            }
-//                            cout << "" << endl;
-//                        }
-//
-//                        for (size_t i = 0; i < marked.size(); ++i) {
-//                            std::cout << "Row " << i << ": ";
-//                            for (size_t j = 0; j < marked[i].size(); ++j) {
-//                                std::cout << marked[i][j] << " ";
-//                            }
-//                            std::cout << std::endl;
-//                        }
-                        //cout << "-----------------------------------------------------" << endl;
-                        // //////////////////////////////////////////////////////
 
                     }
 
@@ -658,26 +611,6 @@ void updateAdjacencyList(Graph &myGraph,  vector<vector<pair<int,int>>>& pairLis
     //UPDATE adjList & weights
     myGraph.graph = NewAdjacencyList;
     myGraph.nodeWeights = newNodeWeights;
-
-    int number = 1;
-        cout << "Adjacency List of the coarsed Graph is:" << endl;
-        for (const auto &vector: NewAdjacencyList) {
-            cout << number++ << " ";
-            for (const auto &pair: vector) {
-                cout << "(" << pair.first << ", " << pair.second << ") ";
-            }
-            cout << " " << endl;
-        }
-
-        cout << "\n" << endl;
-
-    for (size_t i = 0; i < marked.size(); ++i) {
-        std::cout << "Row " << i << ": ";
-        for (size_t j = 0; j < marked[i].size(); ++j) {
-            std::cout << marked[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
 
 }
 
@@ -705,9 +638,9 @@ Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize)
     NewAdjacencyList.resize(partitionSize);
 
     int totNodeWeight = std::accumulate(myGraph.nodeWeights.begin(), myGraph.nodeWeights.end(), 0);
-    std::cout << "Total Node Weight: " << totNodeWeight << std::endl;
+    //std::cout << "Total Node Weight: " << totNodeWeight << std::endl;
     int avgNodeWeight = ceil((2.0*totNodeWeight/myGraph.graph.size())); // 8
-    cout << "Number of partitions to perfom is: " << k << endl;
+    //cout << "Number of partitions to perfom is: " << k << endl;
 
     for(int i = avgNodeWeight; i <= (2*maxNode); i++)
     {
@@ -794,29 +727,6 @@ Graph coarseGraph(Graph &myGraph,vector<int>& partition, int &partitionSize)
 
 
     partitionSize = newNodeWeights.size();
-    int i = 1;
-
-    cout << "\nNew Node weights are: " << endl;
-    cout << "[";
-
-    for(const auto& weight : newNodeWeights )
-    {
-        cout << weight;
-        if(i!= partitionSize)
-        cout << ", ";
-        i++;
-    }
-    cout << "]" << endl;
-
-cout << "\nPairs of nodes merged are: "<< endl;
-    for (int i = 0; i < pairList.size(); ++i) {
-        cout << "Node " << i + 1 << ": ";
-        for (const auto& pair : pairList[i]) {
-            cout << "(" << pair.first << ", " << pair.second << ") ";
-        }
-        cout << endl;
-    }
-
 
     copyGraph.pairList = pairList;
     return copyGraph;
@@ -826,9 +736,9 @@ cout << "\nPairs of nodes merged are: "<< endl;
 void uncoarseGraph(Graph copyGraph, Graph multilevelGraph, vector<int>& partition, int &partitionSize, int n)
 {
 
-    GraphHandler::print(copyGraph);
+    //GraphHandler::print(copyGraph);
 
-    GraphHandler::printPairList(copyGraph);
+    //GraphHandler::printPairList(copyGraph);
 
     int size = copyGraph.graph.size();
     vector<int> newPartition(size);
@@ -854,7 +764,8 @@ void uncoarseGraph(Graph copyGraph, Graph multilevelGraph, vector<int>& partitio
     partition = newPartition;
 
     computePartitionWeights(partition,copyGraph.nodeWeights);
-    computeCutCost(copyGraph,partition);
+    int cutSize = computeCutCost(copyGraph,partition);
+    cout <<"CutSize of the uncoarsed graph: " << cutSize<< endl;
 
 }
 
@@ -877,10 +788,7 @@ void multilevelKL(Graph &multilevelGraph, vector<int>& partition, int &partition
         assignPartition(partition);
         cout <<"*---------------------------------------------------------------------------------------------------------------------------------------------------------*" << endl;
         cout << "Initial partition:  ";
-        for (int i = 0; i < n; ++i) {
-            cout << partition[i] << " ";
-        }
-        cout << endl;
+        printPartition(partition);
 
         return;
     }else
@@ -895,11 +803,9 @@ void multilevelKL(Graph &multilevelGraph, vector<int>& partition, int &partition
         cout << "running uncoarseGraph() pass = " << unfold<< endl;
         unfold++;
         uncoarseGraph(copyGraph, multilevelGraph, partition, partitionSize, n);
-        cout << "\nPartition of the uncoarsed graph: ";
-        for (int i = 0; i < n; ++i) {
-            cout << partition[i] << " ";
-        }
-        cout << endl;
+        //Uncomment to print partitition
+        //cout << "\nPartition of the uncoarsed graph: ";
+        //printPartition(partition);
         cout <<"*---------------------------------------------------------------------------------------------------------------------------------------------------------*" << endl;
         kernighanLin(copyGraph, partition);
 
@@ -911,63 +817,36 @@ int main(int argc, char *argv[]) {
 
     if (argc != 4) {
         std::cerr << "Usage: " << argv[0] << " <num_nodes>  <max_node_weight> <num_partitions>" << std::endl;
-        return 1;
+        return EXIT_FAILURE;
     }
 
     n = std::stoi(argv[1]);
     maxWeight = std::stoi(argv[2]);
     k = std::stoi(argv[3]);
+
+
     auto start_time = chrono::high_resolution_clock::now();
     vector<int> partition(n, -1);
     //generate Graph
-    GraphHandler myGraphHandler(n, maxWeight);
+    //GraphHandler myGraphHandler(n, maxWeight);
     // Save the graph
-    GraphHandler::saveAdjacencyList(myGraphHandler.getGraph(), "graph.txt");
+    //GraphHandler::saveAdjacencyList(myGraphHandler.getGraph(), "graph.txt");
     // Read the graph from file
     Graph myGraph;
     GraphHandler::readAdjacencyList("graph.txt", myGraph);
     cout << "\n\nGraph Generated."<< endl;
 
-    GraphHandler::print(myGraph);
+    //Uncomment to print the graph
+    //GraphHandler::print(myGraph);
 
     isPowerOf2( k, myGraph);
     isContiguous(myGraph);
     int partitionSize = myGraph.graph.size()/2;
     multilevelKL(myGraph, partition, partitionSize, n);
+    cout <<"Final partition is: "<< endl;
+    printPartition(partition);
     auto end_time = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end_time - start_time);
-    cout << "Execution Time: " << duration.count() << " microseconds" << endl;
+    //cout << "Execution Time: " << duration.count() << " microseconds" << endl;
     return 0;
 }
-
-#if 0
-//-----------GRAPH model example-------------
-//    Graph myGraph;
-    myGraph.graph.resize(8);
-    myGraph.nodeWeights = {1, 4, 5, 2, 3, 6, 5, 3};
-
-    myGraph.graph[0].emplace_back(5, 1);
-    myGraph.graph[0].emplace_back(3, 2);
-    myGraph.graph[0].emplace_back(2, 1);
-    myGraph.graph[1].emplace_back(1, 1);
-    myGraph.graph[1].emplace_back(3, 2);
-    myGraph.graph[1].emplace_back(4, 1);
-    myGraph.graph[2].emplace_back(5, 3);
-    myGraph.graph[2].emplace_back(4, 2);
-    myGraph.graph[2].emplace_back(2, 2);
-    myGraph.graph[2].emplace_back(1, 2);
-    myGraph.graph[3].emplace_back(2, 1);
-    myGraph.graph[3].emplace_back(3, 2);
-    myGraph.graph[3].emplace_back(6, 2);
-    myGraph.graph[3].emplace_back(7, 5);
-    myGraph.graph[4].emplace_back(1, 1);
-    myGraph.graph[4].emplace_back(3, 3);
-    myGraph.graph[4].emplace_back(6, 2);
-    myGraph.graph[5].emplace_back(5, 2);
-    myGraph.graph[5].emplace_back(4, 2);
-    myGraph.graph[5].emplace_back(7, 6);
-    myGraph.graph[6].emplace_back(6, 6);
-    myGraph.graph[6].emplace_back(4, 5);
-    myGraph.graph[6].emplace_back(8, 3);
-    myGraph.graph[7].emplace_back(7, 3);
-#endif
