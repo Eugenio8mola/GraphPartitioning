@@ -76,3 +76,7 @@ Each algorithm has its own `README` inside its folder.
 Before running any of the algorithms implemented, read the `README` of the desired sequential or parallel algorithm that you are willing to execute.  
 Further details on execution mode, parameters to pass to run the program and functions used are provided.  
 
+## Authors
+Eugenio Liotine
+Abolfazl Javidian
+
