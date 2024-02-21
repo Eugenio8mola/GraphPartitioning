@@ -174,6 +174,17 @@ It takes two parameters:
 1. the Graph class `myGraph`  
 2. the partition vector `partition` specifying the current partition assigned to each node.  
 
+## `isValidConfiguration`  
+
+The `isValidConfiguration` function checks if both the input integers `num_threads` and `n` satisfy the requirements.
+In particular the number of threads `num_threads` has to be comply with: `num_threads < myGraph.graph.size()/ 2 ` and the allocated number must also be a power of 2, otherwise an error specifying the case is returned.
+
+It takes two parameters:  
+1. the Graph class `myGraph`  
+2. the number of threads `num_threads`.
+
+
+
 ## `isPowerOf2`
 
 The `isPowerOf2` function checks if both the input integer `k` and the size of the graph in terms of number of nodes `n` are powers of 2.  
@@ -258,6 +269,21 @@ It receives four parameters:
 4. the number of threads to allocate  `num_threads`.  
 
 ## `coarsenNodes`
+
+The `coarsenNodes` function performs graph coarsening by calculates the starting and ending indices for the current thread based on the total number of threads and on the size of the graph.
+Calculated index are used as intervals to pass to the `extract_subgraph` of the `GraphHandler` in order to generate a `subgraph` from the original graph `G`.
+Many inviocations to the function `findNodeWithFewestAdjacents` allow to find the pairs to coarse.
+Each thread saves its local list into the `localNodes` vector.
+Then using a mutex for synchronization, each thread writes its local list on the general list `allNodes`.
+
+It receives four parameters:  
+1. `myGraph`: a reference to the graph object.
+2. `partitionSize`: a reference to the size of the partition.
+3. `locked`: vector representing locked nodes.
+4. `allNodes`: vector containing the list of all nodes coarsed.
+5. `newNodeWeights` : vector containing weights of new coarsed nodes.
+6. `thread_id`: ID of the thread.
+7. `num_threads`: Total number of threads.
 
 
 ## `uncoarseGraph`
